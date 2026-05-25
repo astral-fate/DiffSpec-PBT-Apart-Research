@@ -2,10 +2,12 @@
 
 **Validating LLM-generated formal specifications via differential property-based testing.**
 
-Prompt two LLMs to independently generate formal specifications for the
-same requirement. Use property-based testing to surface inputs/outputs
-where the two specs disagree. Each disagreement is a concrete
-counterexample of intent drift, classified by type.
+Prompt independent LLM spec authors for the same natural-language
+requirement. Use property-based testing on each spec pair to surface
+inputs/outputs where they disagree. Each disagreement is a concrete
+counterexample of intent drift, classified by type. Any OpenAI-compatible
+endpoint can serve as an author; the eval harness runs all pairs among
+committed fixture aliases.
 
 > *Built for the Apart Research × Atlas Computing **Secure Program
 > Synthesis Hackathon**, 22–24 May 2026 — Track 2: Specification
@@ -66,20 +68,20 @@ correctness (SPOTs, Lean) is expensive. Feng & Sergey (2026) show PBT is
 unreasonably effective at validating *human-written* Lean specs. We push
 further: **cross-model diversity is the oracle.**
 
-We never need to know the "right" spec — we exploit the fact that two
-LLMs with different training data tend to make *different* mistakes,
-and PBT surfaces the gap in seconds.
+We never need to know the "right" spec — we exploit the fact that
+different authors tend to make *different* mistakes, and PBT surfaces
+the gap in seconds.
 
 ## The three checks
 
-For every (requirement, impl, spec_qwen, spec_llama) tuple, the differ
-runs three property-based checks:
+For every (requirement, impl, spec_a, spec_b) tuple, the differ runs
+three property-based checks:
 
 1. **Soundness** — generate input `i`, compute `o = impl(i)`. If
-   `post_qwen(i,o) ≠ post_llama(i,o)` then one spec is **over**-specified.
+   `post_a(i,o) ≠ post_b(i,o)` then one spec is **over**-specified.
 2. **Uniqueness** — generate input `i` and a mutated output `o'`. If
-   `post_qwen(i,o') ≠ post_llama(i,o')` then one spec is **under**-specified.
-3. **Precondition mismatch** — find `i` where `pre_qwen(i) ≠ pre_llama(i)`.
+   `post_a(i,o') ≠ post_b(i,o')` then one spec is **under**-specified.
+3. **Precondition mismatch** — find `i` where `pre_a(i) ≠ pre_b(i)`.
 
 Each disagreement is auto-classified into `OVERSPEC`, `UNDERSPEC`,
 `PRECOND_MISMATCH`, `EDGE_DRIFT`, or `CRASH`.
@@ -175,7 +177,7 @@ diffspec-pbt/
 │   ├── ground_truth.md       optional local BRD copy (gitignored)
 │   ├── impl.py               reference implementation
 │   ├── strategy.py           Hypothesis strategies
-│   └── fixtures/{qwen,llama}.py    LLM-generated specs
+│   └── fixtures/{qwen,llama,gpt-oss,compound}.py   LLM-generated specs
 ├── evals/run_evals.py        eval harness + headline numbers
 ├── scripts/gen_fixtures.sh   regenerate fixtures via NIM
 ├── tests/                    pytest + hypothesis suite
