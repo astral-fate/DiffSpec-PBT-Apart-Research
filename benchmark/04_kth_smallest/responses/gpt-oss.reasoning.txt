@@ -1,0 +1,15 @@
+We need to produce Python functions pre(i) and post(i,o). Input i is presumably a tuple or something representing the inputs: list of integers and positive integer k. Need to define what valid input is: list of integers (any length, maybe empty) and k positive integer. Also k must be integer >0. So pre(i) returns True iff i is a tuple/list of length 2, first element is list of ints, second is int >0. Also maybe we need to ensure that list elements are ints. Also k can be any int, but positive. That's pre.
+
+post(i,o): For valid i, output o must be the k-th smallest element of the list, or None if k out of range. So we need to compute correct output and compare.
+
+Implementation: pre(i): check isinstance(i, (list, tuple)) and len(i)==2; lst, k = i; check isinstance(lst, list); all(isinstance(x, int) for x in lst); check isinstance(k, int) and k>0.
+
+post(i,o): assume pre(i) true. Compute sorted list; if 1 <= k <= len(lst): expected = sorted(lst)[k-1]; else expected = None. Return o == expected.
+
+Edge cases: duplicates allowed; k-th smallest includes duplicates (i.e., order statistic). That's fine.
+
+Return boolean.
+
+We must output only code, no markdown. Ensure functions defined at top level. No imports needed.
+
+Let's produce code.

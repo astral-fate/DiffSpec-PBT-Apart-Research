@@ -1,0 +1,12 @@
+```python
+def pre(i):
+    return isinstance(i, dict) and 'system' in i and 'user' in i and 'sources' in i and isinstance(i['system'], str) and isinstance(i['user'], str) and isinstance(i['sources'], list) and all(isinstance(source, str) for source in i['sources'])
+
+def post(i, o):
+    if not pre(i):
+        return False
+    system = i['system']
+    user = i['user']
+    sources = i['sources']
+    return isinstance(o, list) and len(o) == 1 + len(sources) and o[0] == system and o[1] == user and o[2:] == sources
+```

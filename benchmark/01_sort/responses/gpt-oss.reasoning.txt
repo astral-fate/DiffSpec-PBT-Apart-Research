@@ -1,0 +1,11 @@
+We need to produce Python code defining pre(i) and post(i,o). pre checks valid input: list of integers. So pre(i) returns True iff i is a list (or tuple?) containing only ints. Probably list. Also ensure it's a list (or iterable). We'll accept list.
+
+post(i,o): returns True iff o is a list of same length, same multiset as i, and non-decreasing (sorted ascending). Need to check multiset equality: sorted(i) == sorted(o). Also non-decreasing: all o[k] <= o[k+1].
+
+Edge cases: empty list.
+
+Implement without imports. Use isinstance(i, list) and all(isinstance(x, int) for x in i). For post, also check isinstance(o, list) and same length, same multiset, non-decreasing.
+
+Return bool.
+
+Write code.

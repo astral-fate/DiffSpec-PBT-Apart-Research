@@ -1,0 +1,8 @@
+```python
+def pre(i):
+    return isinstance(i, tuple) and len(i) == 3 and isinstance(i[0], int) and i[0] >= 0 and isinstance(i[1], int) and i[1] > 0 and isinstance(i[2], bool)
+
+def post(i, o):
+    count, limit, rolled = i
+    return (rolled and o) or (not rolled and count < limit and o)
+```

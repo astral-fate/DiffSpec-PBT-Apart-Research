@@ -1,0 +1,58 @@
+{
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "timestamp_utc": "2026-05-25T00:36:34Z",
+  "elapsed_seconds": 1,
+  "extract_status": "ok",
+  "usage": {
+    "queue_time": 0.049910429,
+    "prompt_tokens": 223,
+    "prompt_time": 0.051292135,
+    "completion_tokens": 480,
+    "completion_time": 1.000425699,
+    "total_tokens": 703,
+    "total_time": 1.051717834,
+    "completion_tokens_details": {
+      "reasoning_tokens": 305
+    }
+  },
+  "reasoning_chars": 1246,
+  "content_chars": 567,
+  "response": {
+    "id": "chatcmpl-220a2e00-ac95-4316-952d-62be5b9d86d7",
+    "object": "chat.completion",
+    "created": 1779669394,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "def pre(i):\n    # Input must be a pair (list_of_ints, k) where k is a positive integer\n    if not isinstance(i, (list, tuple)) or len(i) != 2:\n        return False\n    lst, k = i\n    if not isinstance(lst, list):\n        return False\n    if not all(isinstance(x, int) for x in lst):\n        return False\n    if not isinstance(k, int) or k <= 0:\n        return False\n    return True\n\n\ndef post(i, o):\n    # Assumes pre(i) is True\n    lst, k = i\n    if 1 <= k <= len(lst):\n        expected = sorted(lst)[k - 1]\n    else:\n        expected = None\n    return o == expected",
+          "reasoning": "We need to produce Python functions pre(i) and post(i,o). Input i is presumably a tuple or something representing the inputs: list of integers and positive integer k. Need to define what valid input is: list of integers (any length, maybe empty) and k positive integer. Also k must be integer >0. So pre(i) returns True iff i is a tuple/list of length 2, first element is list of ints, second is int >0. Also maybe we need to ensure that list elements are ints. Also k can be any int, but positive. That's pre.\n\npost(i,o): For valid i, output o must be the k-th smallest element of the list, or None if k out of range. So we need to compute correct output and compare.\n\nImplementation: pre(i): check isinstance(i, (list, tuple)) and len(i)==2; lst, k = i; check isinstance(lst, list); all(isinstance(x, int) for x in lst); check isinstance(k, int) and k>0.\n\npost(i,o): assume pre(i) true. Compute sorted list; if 1 <= k <= len(lst): expected = sorted(lst)[k-1]; else expected = None. Return o == expected.\n\nEdge cases: duplicates allowed; k-th smallest includes duplicates (i.e., order statistic). That's fine.\n\nReturn boolean.\n\nWe must output only code, no markdown. Ensure functions defined at top level. No imports needed.\n\nLet's produce code."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.049910429,
+      "prompt_tokens": 223,
+      "prompt_time": 0.051292135,
+      "completion_tokens": 480,
+      "completion_time": 1.000425699,
+      "total_tokens": 703,
+      "total_time": 1.051717834,
+      "completion_tokens_details": {
+        "reasoning_tokens": 305
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_dee443f41b",
+    "x_groq": {
+      "id": "req_01kse8zrckfx6ax839gz5dk653",
+      "seed": 1196155407
+    },
+    "service_tier": "on_demand"
+  }
+}

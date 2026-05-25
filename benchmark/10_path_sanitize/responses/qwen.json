@@ -1,0 +1,64 @@
+{
+  "provider": "nim",
+  "model": "qwen/qwen3-coder-480b-a35b-instruct",
+  "timestamp_utc": "2026-05-25T00:28:52Z",
+  "elapsed_seconds": 57,
+  "extract_status": "ok",
+  "usage": {
+    "prompt_tokens": 190,
+    "completion_tokens": 182,
+    "total_tokens": 372,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 64
+    }
+  },
+  "reasoning_chars": 0,
+  "content_chars": 662,
+  "response": {
+    "id": "chatcmpl-c4c34930-2997-4410-89b0-806198920faa",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "content": "def pre(i):\n    if not isinstance(i, str):\n        return False\n    return True\n\ndef post(i, o):\n    if not isinstance(i, str) or not isinstance(o, str):\n        return False\n    if '..' in o or o.startswith('/') or '\\x00' in o:\n        return False\n    return True\n\ndef path_santization_post(i, o):\n    \"\"\"Validate the sanitized path doesn't contain .., leading slashes, or null bytes\"\"\"\n    sanitized = i.replace('..', '').replace('\\x00', '').lstrip('/')\n    return o == sanitized and not ('..' in o or '..' in i or '\\x00' in i or i.lstrip() != i)\n\ndef pre(i):\n    return isinstance(i, str)\n\ndef post(i, o):\n    return isinstance(i, str) and isinstance(o, str)",
+          "role": "assistant",
+          "reasoning_content": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "created": 1779668928,
+    "model": "qwen/qwen3-coder-480b-a35b-instruct",
+    "service_tier": null,
+    "system_fingerprint": null,
+    "object": "chat.completion",
+    "usage": {
+      "prompt_tokens": 190,
+      "completion_tokens": 182,
+      "total_tokens": 372,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 64
+      }
+    },
+    "nvext": {
+      "worker_id": {
+        "prefill_worker_id": 7587894933637318995,
+        "prefill_dp_rank": 0,
+        "decode_worker_id": 7587894933637318995,
+        "decode_dp_rank": 0
+      },
+      "timing": {
+        "request_received_ms": 1779668928689,
+        "prefill_wait_time_ms": 2.283444,
+        "prefill_time_ms": 222.042509,
+        "ttft_ms": 224.325953,
+        "total_time_ms": 3830.4652739999997,
+        "kv_hit_rate": 0.0,
+        "router_queue_depth": 0
+      }
+    }
+  }
+}

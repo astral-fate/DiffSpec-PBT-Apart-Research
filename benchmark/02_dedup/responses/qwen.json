@@ -1,0 +1,64 @@
+{
+  "provider": "nim",
+  "model": "qwen/qwen3-coder-480b-a35b-instruct",
+  "timestamp_utc": "2026-05-25T00:08:39Z",
+  "elapsed_seconds": 125,
+  "extract_status": "ok",
+  "usage": {
+    "prompt_tokens": 152,
+    "completion_tokens": 108,
+    "total_tokens": 260,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 64
+    }
+  },
+  "reasoning_chars": 0,
+  "content_chars": 367,
+  "response": {
+    "id": "chatcmpl-d2776f19-0f7e-4725-be65-c5f951f83711",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "content": "def pre(i):\n    return isinstance(i, list) and all(isinstance(x, int) for x in i)\n\ndef post(i, o):\n    if not isinstance(o, list):\n        return False\n    if not isinstance(o, list) or len(o) != len(set(o)) or set(o) != set(i):\n        return False\n    return sorted(o) == sorted(list(set(i))) and set(o) == set(i) and len(o) == len(set(o)) and len(o) == len(set(o))",
+          "role": "assistant",
+          "reasoning_content": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "created": 1779667595,
+    "model": "qwen/qwen3-coder-480b-a35b-instruct",
+    "service_tier": null,
+    "system_fingerprint": null,
+    "object": "chat.completion",
+    "usage": {
+      "prompt_tokens": 152,
+      "completion_tokens": 108,
+      "total_tokens": 260,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 64
+      }
+    },
+    "nvext": {
+      "worker_id": {
+        "prefill_worker_id": 7587894933637318927,
+        "prefill_dp_rank": 0,
+        "decode_worker_id": 7587894933637318927,
+        "decode_dp_rank": 0
+      },
+      "timing": {
+        "request_received_ms": 1779667595344,
+        "prefill_wait_time_ms": 1.6337059999999999,
+        "prefill_time_ms": 120542.512873,
+        "ttft_ms": 120544.146579,
+        "total_time_ms": 124445.642602,
+        "kv_hit_rate": 0.0,
+        "router_queue_depth": 0
+      }
+    }
+  }
+}

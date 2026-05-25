@@ -1,0 +1,58 @@
+{
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "timestamp_utc": "2026-05-25T00:36:40Z",
+  "elapsed_seconds": 2,
+  "extract_status": "ok",
+  "usage": {
+    "queue_time": 0.017474469,
+    "prompt_tokens": 232,
+    "prompt_time": 0.008865382,
+    "completion_tokens": 542,
+    "completion_time": 1.128473576,
+    "total_tokens": 774,
+    "total_time": 1.137338958,
+    "completion_tokens_details": {
+      "reasoning_tokens": 305
+    }
+  },
+  "reasoning_chars": 1293,
+  "content_chars": 935,
+  "response": {
+    "id": "chatcmpl-8ccebcfd-745c-4532-8de2-c44c66f82367",
+    "object": "chat.completion",
+    "created": 1779669400,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "def pre(i):\n    # Input must be a tuple of (user_id, allowed_list, active_flag)\n    if not isinstance(i, tuple) or len(i) != 3:\n        return False\n    user_id, allowed_list, active_flag = i\n    # active_flag must be a boolean\n    if not isinstance(active_flag, bool):\n        return False\n    # allowed_list must be a list, tuple, or set\n    if not isinstance(allowed_list, (list, tuple, set)):\n        return False\n    # user_id must be hashable\n    try:\n        hash(user_id)\n    except Exception:\n        return False\n    # every element in allowed_list must be hashable\n    for elem in allowed_list:\n        try:\n            hash(elem)\n        except Exception:\n            return False\n    return True\n\n\ndef post(i, o):\n    # Output must be a boolean\n    if not isinstance(o, bool):\n        return False\n    user_id, allowed_list, active_flag = i\n    expected = active_flag and (user_id in allowed_list)\n    return o == expected",
+          "reasoning": "We need to output Python code defining pre(i) and post(i,o). Input i presumably is a tuple of (user_id, allowed_list, active). Need to define pre: valid input? Should check types: user identifier maybe any hashable? allowed-list of identifiers list; active boolean. So pre returns True iff i is a tuple of length 3, first element hashable (maybe int/str), second is list (or iterable) of same type elements, third is bool. Could be more strict: allowed list must be list of same type as user identifier? Not required but reasonable.\n\npost(i,o): returns True iff o is True exactly when user in allowed list and active is True. So compute condition.\n\nImplement:\n\ndef pre(i):\n    if not isinstance(i, tuple) or len(i)!=3: return False\n    user, allowed, active = i\n    if not isinstance(active, bool): return False\n    if not isinstance(allowed, (list, tuple, set)): return False\n    # check each element hashable\n    try:\n        hash(user)\n    except TypeError:\n        return False\n    for a in allowed:\n        try:\n            hash(a)\n        except TypeError:\n            return False\n    return True\n\npost(i,o):\n    if not isinstance(o, bool): return False\n    user, allowed, active = i\n    return o == (active and (user in allowed))\n\nReturn bool.\n\nMake sure no imports. Provide code only."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.017474469,
+      "prompt_tokens": 232,
+      "prompt_time": 0.008865382,
+      "completion_tokens": 542,
+      "completion_time": 1.128473576,
+      "total_tokens": 774,
+      "total_time": 1.137338958,
+      "completion_tokens_details": {
+        "reasoning_tokens": 305
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_87b3c396db",
+    "x_groq": {
+      "id": "req_01kse8zy37ecxsa2y05ftg8drw",
+      "seed": 1487262500
+    },
+    "service_tier": "on_demand"
+  }
+}

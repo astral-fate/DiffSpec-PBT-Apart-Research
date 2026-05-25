@@ -1,0 +1,50 @@
+```python
+def pre(i):
+    if not isinstance(i, list):
+        return False
+    for fan in i:
+        if not isinstance(fan, tuple) or len(fan) != 4:
+            return False
+        total_score, gameplay_points, unique_platforms, submission_timestamp = fan
+        if not all(isinstance(x, int) for x in fan):
+            return False
+    return True
+
+def post(i, o):
+    if not pre(i):
+        return False
+    if len(i) == 0:
+        return o == []
+    if len(o) == 0:
+        return False
+
+    # Check that output is a permutation of input
+    if sorted(i) != sorted(o):
+        return False
+
+    # Check that output is sorted
+    for j in range(len(o) - 1):
+        total_score1, gameplay_points1, unique_platforms1, submission_timestamp1 = o[j]
+        total_score2, gameplay_points2, unique_platforms2, submission_timestamp2 = o[j + 1]
+
+        if total_score1 > total_score2:
+            continue
+        elif total_score1 < total_score2:
+            return False
+        else:
+            if gameplay_points1 > gameplay_points2:
+                continue
+            elif gameplay_points1 < gameplay_points2:
+                return False
+            else:
+                if unique_platforms1 > unique_platforms2:
+                    continue
+                elif unique_platforms1 < unique_platforms2:
+                    return False
+                else:
+                    if submission_timestamp1 <= submission_timestamp2:
+                        continue
+                    else:
+                        return False
+    return True
+```

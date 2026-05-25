@@ -1,0 +1,58 @@
+{
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "timestamp_utc": "2026-05-25T00:36:42Z",
+  "elapsed_seconds": 2,
+  "extract_status": "ok",
+  "usage": {
+    "queue_time": 0.017592772,
+    "prompt_tokens": 272,
+    "prompt_time": 0.011658316,
+    "completion_tokens": 545,
+    "completion_time": 1.162209225,
+    "total_tokens": 817,
+    "total_time": 1.173867541,
+    "completion_tokens_details": {
+      "reasoning_tokens": 271
+    }
+  },
+  "reasoning_chars": 1149,
+  "content_chars": 1012,
+  "response": {
+    "id": "chatcmpl-4643ed1c-53de-4db7-882b-4db3c620135e",
+    "object": "chat.completion",
+    "created": 1779669402,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "def pre(i):\n    \"\"\"\n    Validates the input tuple i.\n    i must be a tuple of length 3: (count, limit, rolled)\n    - count: non‑negative integer\n    - limit: non‑negative integer\n    - rolled: boolean\n    \"\"\"\n    if not isinstance(i, tuple) or len(i) != 3:\n        return False\n    count, limit, rolled = i\n    if not (isinstance(count, int) and count >= 0):\n        return False\n    if not (isinstance(limit, int) and limit >= 0):\n        return False\n    if not isinstance(rolled, bool):\n        return False\n    return True\n\n\ndef post(i, o):\n    \"\"\"\n    Checks that the output o is correct for the valid input i.\n    - o must be a boolean.\n    - If rolled is True (window just rolled over), a request is always allowed (o must be True).\n    - Otherwise, a request is allowed iff count < limit.\n    \"\"\"\n    if not pre(i):\n        return False\n    if not isinstance(o, bool):\n        return False\n    count, limit, rolled = i\n    if rolled:\n        return o is True\n    else:\n        return o is (count < limit)",
+          "reasoning": "We need to produce Python functions pre(i) and post(i,o). Input i likely is a tuple or dict containing count, limit, rolled. Need to define what is valid input: count, limit are non-negative integers? rolled is boolean. So pre(i) returns True iff i is a tuple/list/dict with appropriate types and constraints: count >=0, limit >=0, rolled is bool. Also maybe limit >0? Not necessarily. We'll assume limit is non-negative integer.\n\npost(i,o) returns True iff o is boolean and matches the rule: if rolled is True (window just rolled over), then always True (allow). Else (rolled False) then allowed iff count < limit.\n\nAlso note that on fresh window, count is implicitly reset, but we don't have count value? Actually rolled indicates fresh window, so we ignore count. So rule: if rolled: o must be True. else: o == (count < limit).\n\nImplement pre(i): accept i as a dict with keys 'count','limit','rolled' or a tuple of length 3. Simpler: assume i is a tuple (count, limit, rolled). We'll define pre expects a tuple of length 3. Validate types.\n\npost(i,o): first check pre(i) and isinstance(o,bool). Then compute expected.\n\nReturn bool.\n\nWrite code.\n\n"
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.017592772,
+      "prompt_tokens": 272,
+      "prompt_time": 0.011658316,
+      "completion_tokens": 545,
+      "completion_time": 1.162209225,
+      "total_tokens": 817,
+      "total_time": 1.173867541,
+      "completion_tokens_details": {
+        "reasoning_tokens": 271
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_5781dfb07c",
+    "x_groq": {
+      "id": "req_01kse8zzxeed791z349qcmbd73",
+      "seed": 892902754
+    },
+    "service_tier": "on_demand"
+  }
+}

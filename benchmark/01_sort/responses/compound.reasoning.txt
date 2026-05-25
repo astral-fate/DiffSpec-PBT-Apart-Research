@@ -1,0 +1,7 @@
+```python
+def pre(i):
+    return isinstance(i, list) and all(isinstance(x, int) for x in i)
+
+def post(i, o):
+    return sorted(i) == o and o == sorted(o) and len(i) == len(o) and all(x in i for x in o)
+```

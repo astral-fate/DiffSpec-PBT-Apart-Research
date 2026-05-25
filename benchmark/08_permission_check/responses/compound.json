@@ -1,0 +1,95 @@
+{
+  "provider": "groq",
+  "model": "groq/compound",
+  "timestamp_utc": "2026-05-25T00:38:36Z",
+  "elapsed_seconds": 2,
+  "extract_status": "ok",
+  "usage": {
+    "queue_time": 0.053984,
+    "prompt_tokens": 1488,
+    "prompt_time": 0.101614,
+    "completion_tokens": 373,
+    "completion_time": 0.813182,
+    "total_tokens": 1861,
+    "total_time": 0.914798
+  },
+  "reasoning_chars": 303,
+  "content_chars": 345,
+  "response": {
+    "id": "stub",
+    "object": "chat.completion",
+    "created": 1779669516,
+    "model": "groq/compound",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "def pre(i):\n    return (\n        isinstance(i, tuple) and\n        len(i) == 3 and\n        isinstance(i[0], str) and\n        isinstance(i[1], list) and\n        all(isinstance(x, str) for x in i[1]) and\n        isinstance(i[2], bool)\n    )\n\ndef post(i, o):\n    user_id, allowed_list, active = i\n    return o == (user_id in allowed_list and active)",
+          "reasoning": "```python\ndef pre(i):\n    return isinstance(i, tuple) and len(i) == 3 and isinstance(i[0], str) and isinstance(i[1], list) and all(isinstance(x, str) for x in i[1]) and isinstance(i[2], bool)\n\ndef post(i, o):\n    user_id, allowed_list, active = i\n    return o == (user_id in allowed_list and active)\n```"
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.053984,
+      "prompt_tokens": 1488,
+      "prompt_time": 0.101614,
+      "completion_tokens": 373,
+      "completion_time": 0.813182,
+      "total_tokens": 1861,
+      "total_time": 0.914798
+    },
+    "usage_breakdown": {
+      "models": [
+        {
+          "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "usage": {
+            "queue_time": 0.01746944,
+            "prompt_tokens": 268,
+            "prompt_time": 0.012047103,
+            "completion_tokens": 20,
+            "completion_time": 0.045575673,
+            "total_tokens": 288,
+            "total_time": 0.057622776
+          }
+        },
+        {
+          "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "usage": {
+            "queue_time": 0.017209046,
+            "prompt_tokens": 573,
+            "prompt_time": 0.019734249,
+            "completion_tokens": 92,
+            "completion_time": 0.207525358,
+            "total_tokens": 665,
+            "total_time": 0.227259607
+          }
+        },
+        {
+          "model": "openai/gpt-oss-120b",
+          "usage": {
+            "queue_time": 0.019305797,
+            "prompt_tokens": 647,
+            "prompt_time": 0.069833179,
+            "completion_tokens": 261,
+            "completion_time": 0.560081391,
+            "total_tokens": 908,
+            "total_time": 0.62991457,
+            "prompt_tokens_details": {
+              "cached_tokens": 256
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 151
+            }
+          }
+        }
+      ]
+    },
+    "x_groq": {
+      "id": "stub"
+    },
+    "service_tier": "on_demand"
+  }
+}

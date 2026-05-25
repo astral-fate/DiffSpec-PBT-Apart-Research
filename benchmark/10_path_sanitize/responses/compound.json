@@ -1,0 +1,95 @@
+{
+  "provider": "groq",
+  "model": "groq/compound",
+  "timestamp_utc": "2026-05-25T00:37:19Z",
+  "elapsed_seconds": 2,
+  "extract_status": "ok",
+  "usage": {
+    "queue_time": 0.052746,
+    "prompt_tokens": 1535,
+    "prompt_time": 0.078463,
+    "completion_tokens": 639,
+    "completion_time": 1.457147,
+    "total_tokens": 2174,
+    "total_time": 1.535609
+  },
+  "reasoning_chars": 247,
+  "content_chars": 296,
+  "response": {
+    "id": "stub",
+    "object": "chat.completion",
+    "created": 1779669439,
+    "model": "groq/compound",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "def pre(i):\n    return isinstance(i, str)\n\ndef post(i, o):\n    if not pre(i) or not isinstance(o, str):\n        return False\n    expected = i.lstrip('/')\n    expected = expected.replace('\\x00', '')\n    while '..' in expected:\n        expected = expected.replace('..', '')\n    return o == expected",
+          "reasoning": "```python\ndef pre(path):\n    return isinstance(path, str)\n\ndef post(path, sanitized_path):\n    if not pre(path):\n        return False\n    return not sanitized_path.startswith('/') and '..' not in sanitized_path and '\\x00' not in sanitized_path\n```"
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.052746,
+      "prompt_tokens": 1535,
+      "prompt_time": 0.078463,
+      "completion_tokens": 639,
+      "completion_time": 1.457147,
+      "total_tokens": 2174,
+      "total_time": 1.535609
+    },
+    "usage_breakdown": {
+      "models": [
+        {
+          "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "usage": {
+            "queue_time": 0.017198291,
+            "prompt_tokens": 288,
+            "prompt_time": 0.010170266,
+            "completion_tokens": 20,
+            "completion_time": 0.04503878,
+            "total_tokens": 308,
+            "total_time": 0.055209046
+          }
+        },
+        {
+          "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "usage": {
+            "queue_time": 0.01707235,
+            "prompt_tokens": 593,
+            "prompt_time": 0.020664228,
+            "completion_tokens": 61,
+            "completion_time": 0.142735026,
+            "total_tokens": 654,
+            "total_time": 0.163399254
+          }
+        },
+        {
+          "model": "openai/gpt-oss-120b",
+          "usage": {
+            "queue_time": 0.018476291,
+            "prompt_tokens": 654,
+            "prompt_time": 0.047628661,
+            "completion_tokens": 558,
+            "completion_time": 1.269372647,
+            "total_tokens": 1212,
+            "total_time": 1.317001308,
+            "prompt_tokens_details": {
+              "cached_tokens": 256
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 477
+            }
+          }
+        }
+      ]
+    },
+    "x_groq": {
+      "id": "stub"
+    },
+    "service_tier": "on_demand"
+  }
+}

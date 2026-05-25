@@ -1,0 +1,13 @@
+```python
+def pre(i):
+    return isinstance(i, list) and all(isinstance(x, int) for x in i) and isinstance(k, int) and k > 0
+
+def post(i, o):
+    k = i[1]
+    if not pre(i):
+        return False
+    if k > len(i[0]):
+        return o is None
+    else:
+        return o is not None and isinstance(o, int) and o in i[0] and sum(1 for x in i[0] if x < o) == k - 1
+```

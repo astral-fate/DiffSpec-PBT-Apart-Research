@@ -1,0 +1,25 @@
+We need to produce Python functions pre(i) and post(i,o). pre checks valid input: list of integers. So pre(i) returns True iff i is a list (or iterable?) and each element is int. Also maybe allow empty list. So pre(i): isinstance(i, list) and all(isinstance(x, int) for x in i). Could also accept other sequence types? Requirement says "Given a list of integers". So list.
+
+post(i,o): returns True iff o is a list of integers, contains exactly the unique elements of i, order unspecified. So we need to check that set(o) == set(i) and that len(o) == len(set(i)) (ensuring no duplicates). Also ensure each element is int. Also ensure o is list. Also ensure no extra elements. So condition: isinstance(o, list) and all(isinstance(x, int) for x in o) and set(o) == set(i) and len(o) == len(set(i)). That ensures uniqueness. Also need to ensure that o contains each unique element exactly once. The set equality ensures same elements, but duplicates in o would still have same set; we need to ensure no duplicates: len(o) == len(set(o)). But if len(o) == len(set(i)) and set(o)==set(i), then duplicates can't exist because duplicates would increase len(o) beyond set size. So fine.
+
+Edge cases: i may have duplicates; set(i) yields unique. So post must accept any ordering.
+
+Thus produce code:
+
+def pre(i):
+    return isinstance(i, list) and all(isinstance(x, int) for x in i)
+
+def post(i, o):
+    if not isinstance(o, list):
+        return False
+    if not all(isinstance(x, int) for x in o):
+        return False
+    if not pre(i):
+        return False
+    uniq_i = set(i)
+    uniq_o = set(o)
+    return uniq_o == uniq_i and len(o) == len(uniq_i)
+
+But we might not need to call pre(i) inside post; but it's okay. However spec says post(i,o) returns True iff o is correct output for valid input i. If i is invalid, post should be False (since pre(i) false). So we can include check.
+
+Thus final answer: just code.

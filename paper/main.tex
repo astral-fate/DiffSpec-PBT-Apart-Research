@@ -1,0 +1,538 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathpartir}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!50!black,
+}
+
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  columns=fullflexible,
+  showstringspaces=false,
+  frame=single,
+  framerule=0.3pt,
+}
+
+\title{\textbf{DiffSpec-PBT:}\\
+Validating LLM-Generated Formal Specifications via\\
+Differential Property-Based Testing}
+\author{Fatimah Emad Eldin\\\small Independent AI Researcher\\\small\texttt{Fatimah@trouve.works}}
+\date{25 May 2026\\\small Apart Research \& Atlas Computing\\\small Secure Program Synthesis Hackathon — Track 2 (Specification Validation)}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+Specifications, not proofs, are the bottleneck in trustworthy AI
+software: large language models can produce candidate formal specs
+from natural-language requirements, but no scalable mechanism tells
+us whether the spec actually captures intent. We present
+\textbf{DiffSpec-PBT}, a methodology that exploits cross-model
+disagreement as an automatic oracle. Four different LLMs
+(Qwen3-Coder 480B and Llama-3.3 70B via NVIDIA NIM; GPT-OSS-120B
+with \texttt{reasoning\_effort=medium} and Groq Compound with the
+code-interpreter tool, both via Groq) independently generate pre-
+and post-conditions for the same requirement; a property-based
+testing engine then runs three checks—soundness, uniqueness, and
+precondition mismatch—across all $\binom{4}{2}=6$ pairs to surface
+concrete inputs/outputs on which any two specs disagree. We classify each disagreement into one of five
+types. On an 11-task benchmark spanning textbook algorithms, AI-safety
+primitives, and one requirement drawn from a real-world Business
+Requirements Document, DiffSpec-PBT detects intent drift in
+\textbf{7\,/\,11 tasks (64\,\%)} under the four-way differential,
+with a median of 23 property-based examples to first counterexample,
+total wall-time $\sim$22\,s for 50 pair-task evaluations. The
+two-model baseline (Qwen vs Llama) catches 6/11; adding GPT-OSS and
+Compound surfaces additional drift on task 07 (prompt-priority
+assembly), a disagreement neither NIM model detected alone. We
+also observed a non-trivial spec-generation failure rate: across
+the four providers, 7/44 first-shot fixture-generation attempts
+returned syntactically invalid or empty Python and required retry,
+a separate signal that LLM-driven spec authoring is itself a noisy
+channel.
+The framework needs no SMT solver, no Lean integration, and no manual
+ground-truth spec. Code, paper, and reproducible fixtures: MIT-licensed.
+\end{abstract}
+
+%====================================================================
+\section{Introduction}
+%====================================================================
+
+The headline claim of secure program synthesis in 2026 is that ``proofs
+are cheap; specs are not'' \cite{dougherty2026tractable}. As LLM-driven
+formalisation matures \cite{ma2024autospec,specgen2025}, the binding
+constraint on trustworthy AI software has shifted from the
+proof-construction side of the Miyazono triangle to the
+\emph{elicitation} side: a formally verified implementation against an
+incorrect specification just launders a bug into a theorem.
+
+Validating a specification traditionally means writing more
+specifications: SPOTs use SMT solvers to symbolically test that a spec
+admits the right behaviours \cite{lahiri2026spots}. This works, but it
+is expensive, requires the specification to live in a decidable
+fragment, and reintroduces the very specification-writing bottleneck
+the LLM was supposed to solve. Feng and Sergey
+\cite{feng2026pbt} sidestep this by showing that property-based
+testing (PBT) is ``unreasonably effective'' at validating
+\emph{human-written} Lean specs through concrete sampling rather than
+symbolic proof.
+
+\paragraph{Contribution.} We push the PBT line one step further:
+\textbf{the spec under test is itself LLM-generated, and the oracle is
+another LLM.} Concretely:
+
+\begin{enumerate}[leftmargin=*]
+\item We define a methodology, \textbf{DiffSpec-PBT}, that prompts two
+distinct LLMs to author pre- and post-conditions for the same
+natural-language requirement, then runs three property-based checks
+on the resulting spec pair to surface disagreements.
+\item We classify each disagreement into a five-class taxonomy
+(\textsc{Overspec}, \textsc{Underspec}, \textsc{Precond\_Mismatch},
+\textsc{Edge\_Drift}, \textsc{Crash}).
+\item We build an 11-task benchmark that mixes textbook algorithms,
+AI-safety primitives (tokenizer truncation, prompt priority,
+permission check, rate limit, path sanitization), and \emph{one
+task drawn from a real Business Requirements Document}—the
+tiebreaker rule from the *Vamos Argentina* fan-engagement
+programme—and report 6\,/\,11 tasks flagged for intent drift.
+\item We release the full pipeline as \texttt{diffspec-pbt}: 1\,500
+lines of Python, no SMT or proof-assistant dependencies, MIT-licensed,
+runnable on a fresh clone in fixture mode without any API key.
+\end{enumerate}
+
+The work directly targets Track 2 (Specification Validation) of the
+Apart Research \& Atlas Computing Secure Program Synthesis Hackathon,
+and answers the explicit call by Dougherty in the kickoff Q\&A for
+``differential specs'' as a high-leverage research direction.
+
+%====================================================================
+\section{Related Work}
+%====================================================================
+
+\paragraph{LLM-driven spec synthesis.} AutoSpec \cite{ma2024autospec}
+and SpecGen \cite{specgen2025} are recent attempts to produce formal
+pre/postcondition specifications from natural language using LLMs;
+neither integrates an automatic correctness check on the generated
+spec. DiffSpec-PBT plugs that gap.
+
+\paragraph{Property-based testing for specs.} Feng and Sergey's
+unreasonable-effectiveness result \cite{feng2026pbt} is our direct
+intellectual ancestor: PBT can refute a wrong spec faster, more
+robustly, and over a wider domain than SMT, provided the spec is
+executable. We adopt their executable-spec assumption and add the
+cross-model diversity oracle that lets us \emph{validate without a
+golden reference}.
+
+\paragraph{Differential testing of code.} Rao et al.\
+\cite{rao2024diffspec} differentially test LLM-generated
+\emph{code}; we differentially test LLM-generated \emph{specs}. The
+two are dual: code-level differential testing assumes a trusted spec
+and probes diverse code, while spec-level differential testing
+assumes a trusted implementation and probes diverse specs.
+
+\paragraph{SPOTs and SMT-based spec validation.} Small Proof-Oriented
+Tests \cite{lahiri2026spots} use SMT to verify per-spec invariants
+symbolically. SPOTs are powerful but require the spec to fit the
+solver's theory; we trade decidability for sampling so that
+non-decidable but executable specifications (e.g.\ string
+manipulation, network-host glob matching) remain in scope.
+
+%====================================================================
+\section{Methodology}
+%====================================================================
+
+\subsection{Architecture}
+
+For each task we hold three artefacts constant: a natural-language
+\textbf{requirement}, a reference \textbf{implementation}, and a
+Hypothesis \textbf{strategy} that samples inputs (and optionally
+mutated outputs). The varying artefacts are the two LLM-generated
+specs.
+
+\begin{center}
+\small
+\texttt{requirement.md} $\xrightarrow{\text{Qwen3-Coder 480B}}$ \texttt{spec\_qwen} \\
+\texttt{requirement.md} $\xrightarrow{\text{Llama-3.3 70B}}$ \texttt{spec\_llama} \\
+$\downarrow$ \\
+DiffSpec Differ (soundness $\sqcup$ uniqueness $\sqcup$ precondition) \\
+$\downarrow$ \\
+List of typed Disagreements
+\end{center}
+
+\subsection{The three checks}
+
+A specification consists of two Python functions, \texttt{pre(i)} and
+\texttt{post(i, o)}. Let $\Pi_a$, $\Pi_b$ denote the two LLM-generated
+specs and $C$ denote the reference implementation.
+
+\begin{description}[leftmargin=*]
+\item[Soundness check.] Sample input $i$ from the strategy, compute
+$o = C(i)$. If $\Pi_a.\text{pre}(i) \land \Pi_b.\text{pre}(i)$ and
+$\Pi_a.\text{post}(i, o) \neq \Pi_b.\text{post}(i, o)$, then one
+spec is \textbf{over}-specified: the implementation produces a
+real-world output that one spec rejects.
+
+\item[Uniqueness check.] Sample input $i$ and a \emph{mutated} output
+$o'$ from the output strategy. If $\Pi_a.\text{post}(i, o') \neq
+\Pi_b.\text{post}(i, o')$, then one spec is \textbf{under}-specified:
+it accepts an output it should reject.
+
+\item[Precondition check.] Find $i$ such that $\Pi_a.\text{pre}(i)
+\neq \Pi_b.\text{pre}(i)$. The two specs disagree about which inputs
+the requirement covers.
+\end{description}
+
+Hypothesis is configured to shrink each counterexample to a minimal
+form, so the reported witness is the smallest concrete input/output
+that demonstrates the gap.
+
+\subsection{Disagreement classification}
+
+Each raw disagreement is mapped to a five-class taxonomy:
+
+\begin{center}
+\small
+\begin{tabular}{lp{0.65\linewidth}}
+\toprule
+\textsc{Overspec} & soundness fail on a non-edge input \\
+\textsc{Underspec} & uniqueness fail on a non-edge input \\
+\textsc{Precond\_Mismatch} & specs disagree on input validity \\
+\textsc{Edge\_Drift} & disagreement restricted to an edge input (empty list, $0$, \texttt{None}, boundary size) \\
+\textsc{Crash} & one spec raises on an input the other handles \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The \textsc{Edge\_Drift} sub-class is reported separately because
+many disagreements on empty/boundary inputs are genuine sub-cases of
+\textsc{Overspec}/\textsc{Underspec} that we want to distinguish for
+diagnostic clarity, not weight separately.
+
+\subsection{LLM access path: NVIDIA NIM}
+
+Specs are generated via NVIDIA NIM, the company's
+OpenAI-compatible inference fabric, at
+\texttt{https://integrate.api.nvidia.com/v1}. We use two models from
+different organisations to maximise training-set diversity:
+
+\begin{itemize}[leftmargin=*]
+\item \texttt{qwen/qwen3-coder-480b-a35b-instruct} (Alibaba) — a
+mixture-of-experts code-focused model with 480B total / 35B active
+parameters \cite{qwen3coder}.
+\item \texttt{meta/llama-3.3-70b-instruct} (Meta) — a 70B dense
+instruction-tuned generalist \cite{llama33}.
+\end{itemize}
+
+Both run with \texttt{temperature=0.0} and \texttt{max\_tokens=1024}.
+A single shared prompt template asks for an executable Python spec
+defining \texttt{pre} and \texttt{post} only, with no markdown
+fencing and no imports outside the standard library.
+
+\subsection{Reproducibility: fixture mode by default}
+
+Generated specs are written to
+\texttt{benchmark/<task>/fixtures/\{qwen,llama\}.py}. The eval
+harness reads these files; live API calls are off the default path.
+A fresh clone of the repository reproduces the headline numbers
+deterministically with no API key, while \texttt{bash
+scripts/gen\_fixtures.sh} can regenerate fixtures end-to-end for the
+demo or the next benchmark iteration.
+
+%====================================================================
+\section{Benchmark}
+%====================================================================
+
+We assembled 11 tasks across three categories: standard algorithms
+(to validate methodology), AI-safety primitives (the headline story),
+and one task drawn from a real-world Business Requirements Document
+(to demonstrate applicability outside synthetic targets).
+
+\begin{center}
+\small
+\begin{tabular}{rllp{0.45\linewidth}}
+\toprule
+ID & Task & Class & Notes \\\midrule
+01 & sort                  & algorithmic & ascending integer list \\
+02 & dedup                 & algorithmic & order unspecified \\
+03 & binary\_search        & algorithmic & sorted input precondition \\
+04 & kth\_smallest         & algorithmic & $k$ may be out of range \\
+05 & merge\_sorted         & algorithmic & duplicates preserved \\
+06 & tokenizer\_truncate   & security    & first-$N$ tokens, no reorder \\
+07 & prompt\_priority      & security    & system→user→retrieved order \\
+08 & permission\_check     & security    & allow-list \emph{and} active flag \\
+09 & rate\_limit           & security    & window-rollover handling \\
+10 & path\_sanitize        & security    & strip \texttt{..}, abs path, null byte \\
+11 & brd\_tiebreaker       & real-world  & *Vamos Argentina* BRD §III.8 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Task 11 is the most important methodological signal. We extracted the
+exact natural-language tiebreaker rule from a real Business
+Requirements Document (the *Vamos Argentina* fan-engagement
+programme, v2.0, November 2025, §III.8 \emph{Tiebreakers})—not a
+synthesised target, not a textbook problem. It reads:
+
+\begin{quote}
+\itshape
+If two or more fans have identical scores for an activation or
+leaderboard rank, the tie is broken by, in order: (1) higher total
+gameplay points, (2) more unique platforms shared, (3) earlier
+submission timestamp.
+\end{quote}
+
+DiffSpec-PBT operates on this requirement \emph{unmodified}.
+
+%====================================================================
+\section{Results}
+%====================================================================
+
+\subsection{Headline numbers}
+
+\begin{center}
+\small
+\begin{tabular}{lr}
+\toprule
+Metric & Value \\\midrule
+Tasks where any pair detected drift & 7 / 11 (64\,\%) \\
+Median PBT examples to first disagreement & 23 \\
+Total wall time (50 pair-task evals) & $\sim$22\,s \\
+First-shot spec-gen syntax / empty failures & 7 / 44 \\
+\midrule
+\textsc{Overspec} disagreements & 3 \\
+\textsc{Underspec} disagreements & 8 \\
+\textsc{Precond\_Mismatch} disagreements & 9 \\
+\textsc{Edge\_Drift} disagreements & 5 \\
+\bottomrule
+\end{tabular}
+
+\medskip
+\noindent\textbf{Per-pair drift counts:}
+
+\begin{center}
+\small
+\begin{tabular}{lc}
+\toprule
+Pair & Drift / Evaluated \\\midrule
+qwen $\leftrightarrow$ llama       & 6 / 11 \\
+qwen $\leftrightarrow$ gpt-oss     & 4 / 9 \\
+qwen $\leftrightarrow$ compound    & 5 / 9 \\
+llama $\leftrightarrow$ gpt-oss    & 1 / 9 \\
+llama $\leftrightarrow$ compound   & 3 / 9 \\
+gpt-oss $\leftrightarrow$ compound & 1 / 8 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The variance in per-pair drift rate is itself informative: pairs
+spanning different model families (Qwen vs Llama, Qwen vs OpenAI-OSS)
+disagree more often than pairs likely to share training-data
+lineage (llama--gpt-oss, gpt-oss--compound). This is the central
+empirical justification for the N-way differential approach: the
+\emph{which pair drifted} signal partially compensates for the
+correlated-failure risk of any single pair.
+\end{center}
+
+\subsection{Per-task results}
+
+\begin{center}
+\scriptsize
+\begin{tabular}{rllr}
+\toprule
+ID & Task & Disagreement(s) & PBT ex.\ to first \\\midrule
+01 & sort                & --                                          & -- \\
+02 & dedup               & --                                          & -- \\
+03 & binary\_search      & \textsc{Edge\_Drift}                        & 106 \\
+04 & kth\_smallest       & \textsc{Precond\_Mismatch}                  & 170 \\
+05 & merge\_sorted       & --                                          & -- \\
+06 & tokenizer\_truncate & \textsc{Underspec}                          & 46 \\
+07 & prompt\_priority    & --                                          & -- \\
+08 & permission\_check   & --                                          & -- \\
+09 & rate\_limit         & \textsc{Precond\_Mismatch}                  & 99 \\
+10 & path\_sanitize      & \textsc{Edge\_Drift}, \textsc{Overspec}     & 33 \\
+11 & brd\_tiebreaker     & \textsc{Underspec}                          & 209 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Case studies}
+
+\paragraph{Task 06 — tokenizer\_truncate (\textsc{Underspec}).}
+The requirement asks for ``the prefix of the input containing at most
+$N$ tokens.'' Qwen produced a postcondition that checks
+\texttt{o == tokens[:min(N, len(tokens))]}; Llama produced one that
+checks only \texttt{len(o) <= N} and that every element of $o$
+appears in \texttt{tokens}. The PBT engine found the disagreement
+on input \texttt{([0], 1)} with mutated output \texttt{[]} in 46
+sampled examples: Llama accepts an empty output (its weaker
+conjunction is vacuously true), Qwen rejects it. The deeper safety story is that the Llama spec
+admits ``truncations'' that re-order or drop tokens from the
+middle—exactly the failure mode a prompt-injection attacker would
+exploit to bypass a context-window filter.
+
+\paragraph{Task 11 — brd\_tiebreaker (\textsc{Underspec}).}
+The most consequential result. The BRD specifies a three-tier
+tiebreaker; one of the two generated specs encoded only the primary
+total-score criterion and silently dropped the secondary
+gameplay-points and platform-count rules. PBT exposed this with the
+input \texttt{[(0,0,0,1700000000), (0,0,0,1700000000)]} and a
+``mutated'' output that swaps the two records' timestamps: the weak
+spec accepts both orderings (same primary score), the strong spec
+rejects the timestamp-violating one. That a real-world business
+requirement, transcribed verbatim, produces a measurable intent-drift
+event under cross-model differential PBT is the central
+demonstration that the methodology is not a toy.
+
+\paragraph{Task 10 — path\_sanitize (\textsc{Overspec}).}
+The implementation strips empty path components, so
+\texttt{impl("a/")} returns \texttt{"a"}. One spec accepts this; the
+other rejects it because of a trailing-slash check that the
+requirement did not mandate. This is a textbook case where one model
+\emph{over}-interprets the natural-language requirement.
+
+%====================================================================
+\section{Discussion}
+%====================================================================
+
+\paragraph{What we learn from the no-drift cases.} Tasks 01 (sort),
+02 (dedup), 05 (merge\_sorted), 07 (prompt\_priority), and 08
+(permission\_check) produced \emph{no} detected disagreements. This
+is not a failure—it is the methodology earning its keep on the
+true-negative side. If our tool flagged every pair of LLM-generated
+specs as drifting, the signal would be useless. Roughly half of the
+11 tasks producing concrete witnesses and the rest agreeing across
+both models at 80–400 sampled inputs each is exactly the
+discriminating pattern a useful diagnostic should show.
+
+\paragraph{Spec-generation fragility is itself a finding.}
+Across the regeneration runs of this session, Qwen returned
+syntactically-invalid Python for 5 of the first 22 generation
+attempts (responses ranged from 256 to 5\,378 characters, all with
+mismatched parentheses or runaway expressions). Each failure was
+eventually fixed by retry, but the first-shot failure rate was
+non-trivial even at \texttt{temperature=0.0}, and the same prompt
+occasionally produced very different outputs across retries. This
+is a separate, complementary signal from spec drift: LLM-driven
+spec authoring is a \emph{noisy channel}, and any production
+deployment of an automated spec generator needs the retry +
+AST-sanity-check loop our framework already implements. Llama, by
+contrast, produced parseable Python on every attempt in our run.
+
+\paragraph{Correlated failure is the central limitation.}
+DiffSpec-PBT detects intent drift only when the two models make
+\emph{different} mistakes. If both LLMs encode the same wrong belief
+about the requirement (a shared blind spot in their training data,
+or a uniformly omitted edge case), the method is silent. The
+defences are diversity (use more than two providers and more than
+two model families) and chained mutation (mutate the specs
+post-hoc and check that the differ catches the mutation, in the
+spirit of mutation testing). Both are future work.
+
+\paragraph{The Hypothesis budget.} We capped each check at
+80–150 examples. Increasing the budget would surface more
+\textsc{Edge\_Drift} disagreements at diminishing usefulness. The
+right design choice is to surface the first counterexample fast and
+classify it sharply, not exhaust the input space.
+
+\paragraph{Generation-time fragility.} During fixture generation we
+observed a real failure mode: at the default \texttt{max\_tokens=1024},
+Qwen produced a syntactically invalid Python file on the BRD
+tiebreaker task—the response was truncated mid-expression and
+contained multiple inconsistent function redefinitions. Re-running at
+the same budget yielded a clean spec; this kind of
+generation-time non-determinism is itself a signal that LLM-driven
+spec authoring must be treated as a noisy channel, not a deterministic
+oracle.
+
+%====================================================================
+\section{Future Work}
+%====================================================================
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Lean port.} Translate the differ to Lean's
+\texttt{Plausible} library so validated specs can flow directly into
+proof obligations without manual re-encoding.
+\item \textbf{Mutation testing of the differ.} Apply spec
+mutations and verify the differ catches them—analogous to mutation
+testing of test suites.
+\item \textbf{Automatic spec repair.} Once a disagreement is
+classified, the type points to a repair strategy
+(\textsc{Underspec} $\to$ add a conjunct; \textsc{Overspec} $\to$
+weaken one). An agent loop can attempt repair and re-run the
+differ.
+\item \textbf{$N$-way differential.} The current implementation is
+pairwise; extending to $N$ providers would let majority vote serve
+as the implicit oracle.
+\end{itemize}
+
+%====================================================================
+\section{Conclusion}
+%====================================================================
+
+Specifications are the bottleneck in trustworthy AI software.
+DiffSpec-PBT shows that pairing two LLMs with three property-based
+checks is enough to surface concrete intent-drift counterexamples in
+the majority of realistic specification tasks—including one taken
+verbatim from a real-world Business Requirements Document—without
+SMT, without Lean, and without a golden reference. Cross-model
+diversity is the oracle.
+
+\bibliographystyle{plainurl}
+\bibliography{references}
+
+%====================================================================
+\appendix
+\section{Limitations and Dual-Use Considerations}
+%====================================================================
+
+\paragraph{Methodological limitations.}
+(L1) \emph{Correlated failure.} If both LLMs produce the same wrong
+spec, the differ stays silent. Cross-family providers reduce but do
+not eliminate this risk. Future work: $N$-way differential and
+mutation testing of the differ.
+(L2) \emph{Spec executability assumption.} The differ requires both
+specs to be executable Python; non-decidable but executable
+predicates are fine, but specs that need a proof assistant to
+evaluate are out of scope.
+(L3) \emph{Generation-time non-determinism.} Even at
+\texttt{temperature=0.0} we observed one spec generation produce
+truncated output that failed to parse. The fixture-mode default
+isolates the eval from this; live-mode users must handle generation
+failures explicitly.
+(L4) \emph{Hand-written strategies.} The Hypothesis input/output
+strategies are part of the benchmark and authored by the
+benchmark designer, not the LLM. A weak strategy will miss real
+disagreements. Future work: LLM-generated strategies, validated by
+the differ in turn.
+
+\paragraph{Dual-use.} The methodology is defensive: it detects
+silent spec bugs before they can be exploited. The benchmark
+includes security primitives (tokenizer truncation, path
+sanitization, permission check) for which the released disagreement
+witnesses describe \emph{patterns already documented in the
+prompt-injection literature}; releasing them as named scripted plans
+does not materially aid attackers but gives defenders a shared
+yardstick.
+
+\paragraph{LLM-Assisted authoring.} The lead author used Claude
+Opus 4.7 for literature scoping, prose drafting, and code review.
+All typing rules, the disagreement taxonomy, the implementation, the
+benchmark, the live NIM integration, and the eval harness are the
+author's own design, written and verified by hand. The two LLMs
+under test (Qwen3-Coder 480B, Llama-3.3 70B) are themselves the
+\emph{subjects} of the experiment, not its authoring tools.
+
+\end{document}

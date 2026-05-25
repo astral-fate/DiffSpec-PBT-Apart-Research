@@ -1,0 +1,58 @@
+{
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "timestamp_utc": "2026-05-25T00:36:28Z",
+  "elapsed_seconds": 2,
+  "extract_status": "ok",
+  "usage": {
+    "queue_time": 0.043378318,
+    "prompt_tokens": 223,
+    "prompt_time": 0.008728047,
+    "completion_tokens": 363,
+    "completion_time": 0.754323589,
+    "total_tokens": 586,
+    "total_time": 0.763051636,
+    "completion_tokens_details": {
+      "reasoning_tokens": 175
+    }
+  },
+  "reasoning_chars": 696,
+  "content_chars": 673,
+  "response": {
+    "id": "chatcmpl-d984a5d7-d83a-43e5-92aa-8f4153fe064e",
+    "object": "chat.completion",
+    "created": 1779669388,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "def pre(i):\n    \"\"\"Return True iff i is a list of integers.\"\"\"\n    if not isinstance(i, list):\n        return False\n    return all(isinstance(x, int) for x in i)\n\n\ndef post(i, o):\n    \"\"\"Return True iff o is a correctly sorted version of i.\n\n    Conditions:\n    - o is a list.\n    - o contains exactly the same multiset of elements as i.\n    - o is non‑decreasing (ascending order, allowing duplicates).\n    \"\"\"\n    if not isinstance(o, list):\n        return False\n    if len(i) != len(o):\n        return False\n    # multiset equality\n    if sorted(i) != sorted(o):\n        return False\n    # non‑decreasing order\n    return all(o[k] <= o[k + 1] for k in range(len(o) - 1))",
+          "reasoning": "We need to produce Python code defining pre(i) and post(i,o). pre checks valid input: list of integers. So pre(i) returns True iff i is a list (or tuple?) containing only ints. Probably list. Also ensure it's a list (or iterable). We'll accept list.\n\npost(i,o): returns True iff o is a list of same length, same multiset as i, and non-decreasing (sorted ascending). Need to check multiset equality: sorted(i) == sorted(o). Also non-decreasing: all o[k] <= o[k+1].\n\nEdge cases: empty list.\n\nImplement without imports. Use isinstance(i, list) and all(isinstance(x, int) for x in i). For post, also check isinstance(o, list) and same length, same multiset, non-decreasing.\n\nReturn bool.\n\nWrite code."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.043378318,
+      "prompt_tokens": 223,
+      "prompt_time": 0.008728047,
+      "completion_tokens": 363,
+      "completion_time": 0.754323589,
+      "total_tokens": 586,
+      "total_time": 0.763051636,
+      "completion_tokens_details": {
+        "reasoning_tokens": 175
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_dee443f41b",
+    "x_groq": {
+      "id": "req_01kse8zjeteb787y3c2nzdb0yj",
+      "seed": 1474995844
+    },
+    "service_tier": "on_demand"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "provider": "nim",
+  "model": "meta/llama-3.3-70b-instruct",
+  "timestamp_utc": "2026-05-24T23:46:25Z",
+  "elapsed_seconds": 15,
+  "extract_status": "ok",
+  "usage": {
+    "prompt_tokens": 177,
+    "total_tokens": 300,
+    "completion_tokens": 123,
+    "prompt_tokens_details": null
+  },
+  "reasoning_chars": 0,
+  "content_chars": 362,
+  "response": {
+    "id": "chatcmpl-b188548d8c8e36b5",
+    "object": "chat.completion",
+    "created": 1779666370,
+    "model": "meta/llama-3.3-70b-instruct",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "def pre(i):\n    return isinstance(i, tuple) and len(i) == 2 and isinstance(i[0], list) and all(isinstance(x, int) for x in i[0]) and all(i[0][j] <= i[0][j+1] for j in range(len(i[0])-1)) and isinstance(i[1], int)\n\ndef post(i, o):\n    lst, target = i\n    if o == -1:\n        return target not in lst\n    else:\n        return 0 <= o < len(lst) and lst[o] == target",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "tool_calls": [],
+          "reasoning": null,
+          "reasoning_content": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": null,
+        "token_ids": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+      "prompt_tokens": 177,
+      "total_tokens": 300,
+      "completion_tokens": 123,
+      "prompt_tokens_details": null
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "kv_transfer_params": null
+  }
+}

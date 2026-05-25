@@ -1,0 +1,92 @@
+{
+  "provider": "groq",
+  "model": "groq/compound",
+  "timestamp_utc": "2026-05-25T00:36:47Z",
+  "elapsed_seconds": 1,
+  "extract_status": "ok",
+  "usage": {
+    "queue_time": 0.155063,
+    "prompt_tokens": 1426,
+    "prompt_time": 0.0554,
+    "completion_tokens": 502,
+    "completion_time": 1.0625,
+    "total_tokens": 1928,
+    "total_time": 1.1179
+  },
+  "reasoning_chars": 205,
+  "content_chars": 187,
+  "response": {
+    "id": "stub",
+    "object": "chat.completion",
+    "created": 1779669408,
+    "model": "groq/compound",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "def pre(i):\n    return isinstance(i, list) and all(isinstance(x, int) for x in i)\n\ndef post(i, o):\n    return isinstance(o, list) and all(isinstance(x, int) for x in o) and o == sorted(i)",
+          "reasoning": "```python\ndef pre(i):\n    return isinstance(i, list) and all(isinstance(x, int) for x in i)\n\ndef post(i, o):\n    return sorted(i) == o and o == sorted(o) and len(i) == len(o) and all(x in i for x in o)\n```"
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.155063,
+      "prompt_tokens": 1426,
+      "prompt_time": 0.0554,
+      "completion_tokens": 502,
+      "completion_time": 1.0625,
+      "total_tokens": 1928,
+      "total_time": 1.1179
+    },
+    "usage_breakdown": {
+      "models": [
+        {
+          "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "usage": {
+            "queue_time": 0.017292022,
+            "prompt_tokens": 259,
+            "prompt_time": 0.009523897,
+            "completion_tokens": 20,
+            "completion_time": 0.04599269,
+            "total_tokens": 279,
+            "total_time": 0.055516587
+          }
+        },
+        {
+          "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "usage": {
+            "queue_time": 0.120144862,
+            "prompt_tokens": 564,
+            "prompt_time": 0.020733388,
+            "completion_tokens": 66,
+            "completion_time": 0.149137011,
+            "total_tokens": 630,
+            "total_time": 0.169870399
+          }
+        },
+        {
+          "model": "openai/gpt-oss-120b",
+          "usage": {
+            "queue_time": 0.017625858,
+            "prompt_tokens": 603,
+            "prompt_time": 0.025143052,
+            "completion_tokens": 416,
+            "completion_time": 0.867370421,
+            "total_tokens": 1019,
+            "total_time": 0.892513473,
+            "completion_tokens_details": {
+              "reasoning_tokens": 351
+            }
+          }
+        }
+      ]
+    },
+    "x_groq": {
+      "id": "stub"
+    },
+    "service_tier": "on_demand"
+  }
+}

@@ -1,0 +1,8 @@
+```python
+def pre(i):
+    return isinstance(i, tuple) and len(i) == 3 and isinstance(i[0], str) and isinstance(i[1], list) and all(isinstance(x, str) for x in i[1]) and isinstance(i[2], bool)
+
+def post(i, o):
+    user_id, allowed_list, active = i
+    return o == (user_id in allowed_list and active)
+```

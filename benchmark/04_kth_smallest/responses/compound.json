@@ -1,0 +1,92 @@
+{
+  "provider": "groq",
+  "model": "groq/compound",
+  "timestamp_utc": "2026-05-25T00:38:23Z",
+  "elapsed_seconds": 2,
+  "extract_status": "ok",
+  "usage": {
+    "queue_time": 0.053516,
+    "prompt_tokens": 1483,
+    "prompt_time": 0.065309,
+    "completion_tokens": 748,
+    "completion_time": 1.582227,
+    "total_tokens": 2231,
+    "total_time": 1.647535
+  },
+  "reasoning_chars": 364,
+  "content_chars": 635,
+  "response": {
+    "id": "stub",
+    "object": "chat.completion",
+    "created": 1779669503,
+    "model": "groq/compound",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "def pre(i):\n    # Input must be a pair (list_of_ints, k) where k is a positive integer\n    if not isinstance(i, (list, tuple)) or len(i) != 2:\n        return False\n    lst, k = i\n    if not isinstance(lst, list):\n        return False\n    if not all(isinstance(x, int) for x in lst):\n        return False\n    if not isinstance(k, int) or k <= 0:\n        return False\n    return True\n\ndef post(i, o):\n    # Correct output for a valid input\n    if not pre(i):\n        return False\n    lst, k = i\n    n = len(lst)\n    if k > n:\n        return o is None\n    # k-th smallest (1‑based) element\n    kth = sorted(lst)[k - 1]\n    return o == kth",
+          "reasoning": "```python\ndef pre(i):\n    return isinstance(i, list) and all(isinstance(x, int) for x in i) and isinstance(k, int) and k > 0\n\ndef post(i, o):\n    k = i[1]\n    if not pre(i):\n        return False\n    if k > len(i[0]):\n        return o is None\n    else:\n        return o is not None and isinstance(o, int) and o in i[0] and sum(1 for x in i[0] if x < o) == k - 1\n```"
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.053516,
+      "prompt_tokens": 1483,
+      "prompt_time": 0.065309,
+      "completion_tokens": 748,
+      "completion_time": 1.582227,
+      "total_tokens": 2231,
+      "total_time": 1.647535
+    },
+    "usage_breakdown": {
+      "models": [
+        {
+          "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "usage": {
+            "queue_time": 0.017328467,
+            "prompt_tokens": 259,
+            "prompt_time": 0.011793741,
+            "completion_tokens": 20,
+            "completion_time": 0.045009255,
+            "total_tokens": 279,
+            "total_time": 0.056802996
+          }
+        },
+        {
+          "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "usage": {
+            "queue_time": 0.016899123,
+            "prompt_tokens": 564,
+            "prompt_time": 0.023606041,
+            "completion_tokens": 123,
+            "completion_time": 0.277522307,
+            "total_tokens": 687,
+            "total_time": 0.301128348
+          }
+        },
+        {
+          "model": "openai/gpt-oss-120b",
+          "usage": {
+            "queue_time": 0.019289459,
+            "prompt_tokens": 660,
+            "prompt_time": 0.029908547,
+            "completion_tokens": 605,
+            "completion_time": 1.259695561,
+            "total_tokens": 1265,
+            "total_time": 1.289604108,
+            "completion_tokens_details": {
+              "reasoning_tokens": 409
+            }
+          }
+        }
+      ]
+    },
+    "x_groq": {
+      "id": "stub"
+    },
+    "service_tier": "on_demand"
+  }
+}

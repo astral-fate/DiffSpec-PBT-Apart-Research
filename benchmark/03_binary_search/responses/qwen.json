@@ -1,0 +1,64 @@
+{
+  "provider": "nim",
+  "model": "qwen/qwen3-coder-480b-a35b-instruct",
+  "timestamp_utc": "2026-05-24T23:46:59Z",
+  "elapsed_seconds": 34,
+  "extract_status": "ok",
+  "usage": {
+    "prompt_tokens": 157,
+    "completion_tokens": 275,
+    "total_tokens": 432,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 157
+    }
+  },
+  "reasoning_chars": 0,
+  "content_chars": 1048,
+  "response": {
+    "id": "chatcmpl-c14101df-5ec2-499c-ab33-83589c17f266",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "content": "def pre(i):\n    if not isinstance(i, tuple) or len(i) != 2:\n        return False\n    arr, target = i\n    if not isinstance(arr, list):\n        return False\n    if not all(isinstance(x, int) for x in arr):\n        return False\n    if not all(arr[i] <= arr[i + 1] for i in range(len(arr) - 1)):\n        return False\n    return True\n\ndef post(i, o):\n    if not isinstance(i, tuple) or len(i) != 2:\n        return False\n    arr, target = i\n    if not isinstance(arr, list):\n        return False\n    if not isinstance(target, int):\n        return False\n    if not all(isinstance(x, (int, type(None))) for x in arr):\n        return False\n    if not all(isinstance(x, int) for x in range(len(arr)) if isinstance(arr, list) and all(isinstance(item, (int, type(None))) for item in arr)):\n        return True\n    expected_index = -1\n    for idx, val in enumerate(arr):\n        if val == target:\n            expected_index = idx\n            break\n    if expected_index == -1:\n        return o == -1\n    else:\n        return o == expected_index\n    return True",
+          "role": "assistant",
+          "reasoning_content": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "created": 1779666407,
+    "model": "qwen/qwen3-coder-480b-a35b-instruct",
+    "service_tier": null,
+    "system_fingerprint": null,
+    "object": "chat.completion",
+    "usage": {
+      "prompt_tokens": 157,
+      "completion_tokens": 275,
+      "total_tokens": 432,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 157
+      }
+    },
+    "nvext": {
+      "worker_id": {
+        "prefill_worker_id": 7587894933637319008,
+        "prefill_dp_rank": 0,
+        "decode_worker_id": 7587894933637319008,
+        "decode_dp_rank": 0
+      },
+      "timing": {
+        "request_received_ms": 1779666407397,
+        "prefill_wait_time_ms": 1.823242,
+        "prefill_time_ms": 247.87831,
+        "ttft_ms": 249.701552,
+        "total_time_ms": 12566.065894,
+        "kv_hit_rate": 0.6,
+        "router_queue_depth": 0
+      }
+    }
+  }
+}

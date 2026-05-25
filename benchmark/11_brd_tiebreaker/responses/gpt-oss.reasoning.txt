@@ -1,0 +1,47 @@
+We need to produce Python code defining pre(i) and post(i,o). Input i is a list of fan records (tuples of four ints). pre should check that i is a list (or iterable) of tuples of length 4, each element int. Also ensure each tuple has ints. Also maybe ensure timestamps non-negative? Not required. So pre returns True if valid.
+
+post(i,o) should verify that o is a list (or same type) containing same multiset of records as i (i.e., permutation) and sorted according to ranking: descending total_score, then descending gameplay_points, then descending unique_platforms, then ascending submission_timestamp. Also stable for remaining ties (any order). So we need to check that o is a permutation of i (same elements count). Then check ordering condition: for each consecutive pair, the earlier element should be >= later according to comparator.
+
+Define comparator function rank_key: (-total_score, -gameplay_points, -unique_platforms, submission_timestamp). Then sorted(i, key=rank_key). Since ties after all criteria may be any order, we just need to ensure that o is sorted according to that key non-decreasing (i.e., key values are non-decreasing). Actually we want highest rank first, so key should be tuple as above; sorting ascending yields correct order. So we can compute sorted_i = sorted(i, key=lambda r: (-r[0], -r[1], -r[2], r[3])). Then check that o is a permutation of i and that o equals sorted_i or any list that respects ordering but may differ in order among equal keys. Since equal keys can be any order, we can just check that for each adjacent pair, key(prev) <= key(next) (lexicographically). That ensures ordering but allows any permutation among equal keys. Also need to ensure same multiset: we can compare sorted versions of i and o using same key? But sorting will reorder equal keys arbitrarily; but if o has same elements, sorting both will be equal. Simpler: check that collections.Counter(i) == collections.Counter(o). Since tuples are hashable. Use from collections import Counter.
+
+Thus post returns True if:
+
+- isinstance(o, list) (or sequence) and length matches i.
+- Counter(i) == Counter(o)
+- For all idx from 0 to len(o)-2: key(o[idx]) <= key(o[idx+1]) (lexicographically). Use tuple comparison.
+
+Edge cases: empty list.
+
+Implement pre: check isinstance(i, (list, tuple))? Input spec says list, but we can accept any sequence. We'll require list.
+
+Implementation:
+
+def pre(i):
+    if not isinstance(i, list):
+        return False
+    for rec in i:
+        if not (isinstance(rec, tuple) and len(rec) == 4):
+            return False
+        for field in rec:
+            if not isinstance(field, int):
+                return False
+    return True
+
+post(i,o):
+    if not isinstance(o, list):
+        return False
+    if len(i) != len(o):
+        return False
+    from collections import Counter
+    if Counter(i) != Counter(o):
+        return False
+    def key(r):
+        return (-r[0], -r[1], -r[2], r[3])
+    for a,b in zip(o, o[1:]):
+        if key(a) > key(b):
+            return False
+    return True
+
+Make sure imports are at top-level? Allowed standard library imports. So include from collections import Counter.
+
+Return only code.

@@ -1,0 +1,2150 @@
+{
+  "total_tasks": 55,
+  "tasks_with_drift": 20,
+  "tasks_with_load_error": 0,
+  "drift_rate": 0.36363636363636365,
+  "by_type": {
+    "OVERSPEC": 3,
+    "UNDERSPEC": 8,
+    "PRECOND_MISMATCH": 9,
+    "EDGE_DRIFT": 5,
+    "CRASH": 0
+  },
+  "median_examples_to_first_disagreement": 23,
+  "tasks": [
+    {
+      "task": "01_sort",
+      "spec_a": "qwen",
+      "spec_b": "llama",
+      "elapsed_seconds": 0.5911,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "01_sort",
+      "spec_a": "qwen",
+      "spec_b": "gpt-oss",
+      "elapsed_seconds": 0.3939,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "01_sort",
+      "spec_a": "qwen",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.3822,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "01_sort",
+      "spec_a": "llama",
+      "spec_b": "gpt-oss",
+      "elapsed_seconds": 0.5254,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "01_sort",
+      "spec_a": "llama",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.3606,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "01_sort",
+      "spec_a": "gpt-oss",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.3651,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "02_dedup",
+      "spec_a": "qwen",
+      "spec_b": "llama",
+      "elapsed_seconds": 0.3886,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "02_dedup",
+      "spec_a": "qwen",
+      "spec_b": "gpt-oss",
+      "elapsed_seconds": 0.3646,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "02_dedup",
+      "spec_a": "qwen",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.3355,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "02_dedup",
+      "spec_a": "llama",
+      "spec_b": "gpt-oss",
+      "elapsed_seconds": 0.3578,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "02_dedup",
+      "spec_a": "llama",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.3878,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "02_dedup",
+      "spec_a": "gpt-oss",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.3232,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "03_binary_search",
+      "spec_a": "qwen",
+      "spec_b": "llama",
+      "elapsed_seconds": 0.4729,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 72,
+          "disagreement": {
+            "type": "EDGE_DRIFT",
+            "input": "([0, 0, 0], 0)",
+            "output": "1",
+            "spec_a_verdict": false,
+            "spec_b_verdict": true,
+            "explanation": "implementation output rejected by 'qwen' but accepted by the other; the rejecter is OVERspecified"
+          }
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "03_binary_search",
+      "spec_a": "qwen",
+      "spec_b": "gpt-oss",
+      "elapsed_seconds": 0.8118,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 2,
+          "disagreement": {
+            "type": "EDGE_DRIFT",
+            "input": "([0, 0, 0], 0)",
+            "output": "1",
+            "spec_a_verdict": false,
+            "spec_b_verdict": true,
+            "explanation": "implementation output rejected by 'qwen' but accepted by the other; the rejecter is OVERspecified"
+          }
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 272,
+          "disagreement": {
+            "type": "UNDERSPEC",
+            "input": "([0, 0, 0, 0, 0, 6, 6], 6)",
+            "output": "6",
+            "spec_a_verdict": false,
+            "spec_b_verdict": true,
+            "explanation": "mutated output accepted by 'gpt-oss' but rejected by the other; the accepter is UNDERspecified"
+          }
+        }
+      ]
+    },
+    {
+      "task": "03_binary_search",
+      "spec_a": "qwen",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.0909,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 2,
+          "disagreement": {
+            "type": "EDGE_DRIFT",
+            "input": "([0, 0, 0], 0)",
+            "output": "1",
+            "spec_a_verdict": false,
+            "spec_b_verdict": true,
+            "explanation": "implementation output rejected by 'qwen' but accepted by the other; the rejecter is OVERspecified"
+          }
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 2,
+          "disagreement": {
+            "type": "UNDERSPEC",
+            "input": "([0, 0, 0, 0, 0, 6, 6], 6)",
+            "output": "6",
+            "spec_a_verdict": false,
+            "spec_b_verdict": true,
+            "explanation": "mutated output accepted by 'compound' but rejected by the other; the accepter is UNDERspecified"
+          }
+        }
+      ]
+    },
+    {
+      "task": "03_binary_search",
+      "spec_a": "llama",
+      "spec_b": "gpt-oss",
+      "elapsed_seconds": 0.3338,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "03_binary_search",
+      "spec_a": "llama",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.3409,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "03_binary_search",
+      "spec_a": "gpt-oss",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.3123,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "04_kth_smallest",
+      "spec_a": "qwen",
+      "spec_b": "llama",
+      "elapsed_seconds": 0.6356,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 156,
+          "disagreement": {
+            "type": "PRECOND_MISMATCH",
+            "input": "([], 0)",
+            "output": null,
+            "spec_a_verdict": true,
+            "spec_b_verdict": false,
+            "explanation": "specs disagree on whether input is valid: qwen.pre=True, llama.pre=False"
+          }
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "04_kth_smallest",
+      "spec_a": "qwen",
+      "spec_b": "gpt-oss",
+      "elapsed_seconds": 0.2754,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 2,
+          "disagreement": {
+            "type": "PRECOND_MISMATCH",
+            "input": "([], 0)",
+            "output": null,
+            "spec_a_verdict": true,
+            "spec_b_verdict": false,
+            "explanation": "specs disagree on whether input is valid: qwen.pre=True, gpt-oss.pre=False"
+          }
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "04_kth_smallest",
+      "spec_a": "qwen",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.3329,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 2,
+          "disagreement": {
+            "type": "PRECOND_MISMATCH",
+            "input": "([], 0)",
+            "output": null,
+            "spec_a_verdict": true,
+            "spec_b_verdict": false,
+            "explanation": "specs disagree on whether input is valid: qwen.pre=True, compound.pre=False"
+          }
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "04_kth_smallest",
+      "spec_a": "llama",
+      "spec_b": "gpt-oss",
+      "elapsed_seconds": 0.3413,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "04_kth_smallest",
+      "spec_a": "llama",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.3251,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "04_kth_smallest",
+      "spec_a": "gpt-oss",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.3204,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "05_merge_sorted",
+      "spec_a": "qwen",
+      "spec_b": "llama",
+      "elapsed_seconds": 0.4152,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "06_tokenizer_truncate",
+      "spec_a": "qwen",
+      "spec_b": "llama",
+      "elapsed_seconds": 0.346,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 33,
+          "disagreement": {
+            "type": "UNDERSPEC",
+            "input": "([0], 1)",
+            "output": "[]",
+            "spec_a_verdict": true,
+            "spec_b_verdict": false,
+            "explanation": "mutated output accepted by 'qwen' but rejected by the other; the accepter is UNDERspecified"
+          }
+        }
+      ]
+    },
+    {
+      "task": "06_tokenizer_truncate",
+      "spec_a": "qwen",
+      "spec_b": "gpt-oss",
+      "elapsed_seconds": 0.1637,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 2,
+          "disagreement": {
+            "type": "UNDERSPEC",
+            "input": "([0], 1)",
+            "output": "[]",
+            "spec_a_verdict": true,
+            "spec_b_verdict": false,
+            "explanation": "mutated output accepted by 'qwen' but rejected by the other; the accepter is UNDERspecified"
+          }
+        }
+      ]
+    },
+    {
+      "task": "06_tokenizer_truncate",
+      "spec_a": "llama",
+      "spec_b": "gpt-oss",
+      "elapsed_seconds": 0.3586,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "07_prompt_priority",
+      "spec_a": "qwen",
+      "spec_b": "llama",
+      "elapsed_seconds": 0.4894,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "07_prompt_priority",
+      "spec_a": "qwen",
+      "spec_b": "gpt-oss",
+      "elapsed_seconds": 0.3782,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "07_prompt_priority",
+      "spec_a": "qwen",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.6877,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 112,
+          "disagreement": {
+            "type": "PRECOND_MISMATCH",
+            "input": "('a', 'a', [])",
+            "output": null,
+            "spec_a_verdict": true,
+            "spec_b_verdict": false,
+            "explanation": "specs disagree on whether input is valid: qwen.pre=True, compound.pre=False"
+          }
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "07_prompt_priority",
+      "spec_a": "llama",
+      "spec_b": "gpt-oss",
+      "elapsed_seconds": 0.3319,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "07_prompt_priority",
+      "spec_a": "llama",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.6585,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 112,
+          "disagreement": {
+            "type": "PRECOND_MISMATCH",
+            "input": "('a', 'a', [])",
+            "output": null,
+            "spec_a_verdict": true,
+            "spec_b_verdict": false,
+            "explanation": "specs disagree on whether input is valid: llama.pre=True, compound.pre=False"
+          }
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "07_prompt_priority",
+      "spec_a": "gpt-oss",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.2614,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 2,
+          "disagreement": {
+            "type": "PRECOND_MISMATCH",
+            "input": "('a', 'a', [])",
+            "output": null,
+            "spec_a_verdict": true,
+            "spec_b_verdict": false,
+            "explanation": "specs disagree on whether input is valid: gpt-oss.pre=True, compound.pre=False"
+          }
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "08_permission_check",
+      "spec_a": "qwen",
+      "spec_b": "llama",
+      "elapsed_seconds": 0.337,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "08_permission_check",
+      "spec_a": "qwen",
+      "spec_b": "gpt-oss",
+      "elapsed_seconds": 0.3264,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "08_permission_check",
+      "spec_a": "qwen",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.3295,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "08_permission_check",
+      "spec_a": "llama",
+      "spec_b": "gpt-oss",
+      "elapsed_seconds": 0.34,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "08_permission_check",
+      "spec_a": "llama",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.3349,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "08_permission_check",
+      "spec_a": "gpt-oss",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.3825,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "09_rate_limit",
+      "spec_a": "qwen",
+      "spec_b": "llama",
+      "elapsed_seconds": 0.4432,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 95,
+          "disagreement": {
+            "type": "PRECOND_MISMATCH",
+            "input": "(0, 1, False)",
+            "output": null,
+            "spec_a_verdict": true,
+            "spec_b_verdict": false,
+            "explanation": "specs disagree on whether input is valid: qwen.pre=True, llama.pre=False"
+          }
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "09_rate_limit",
+      "spec_a": "qwen",
+      "spec_b": "gpt-oss",
+      "elapsed_seconds": 0.2415,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "09_rate_limit",
+      "spec_a": "qwen",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.2376,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "09_rate_limit",
+      "spec_a": "llama",
+      "spec_b": "gpt-oss",
+      "elapsed_seconds": 0.434,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 95,
+          "disagreement": {
+            "type": "PRECOND_MISMATCH",
+            "input": "(0, 1, False)",
+            "output": null,
+            "spec_a_verdict": false,
+            "spec_b_verdict": true,
+            "explanation": "specs disagree on whether input is valid: llama.pre=False, gpt-oss.pre=True"
+          }
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "09_rate_limit",
+      "spec_a": "llama",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.2145,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 2,
+          "disagreement": {
+            "type": "PRECOND_MISMATCH",
+            "input": "(0, 1, False)",
+            "output": null,
+            "spec_a_verdict": false,
+            "spec_b_verdict": true,
+            "explanation": "specs disagree on whether input is valid: llama.pre=False, compound.pre=True"
+          }
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "09_rate_limit",
+      "spec_a": "gpt-oss",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.2285,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "10_path_sanitize",
+      "spec_a": "qwen",
+      "spec_b": "llama",
+      "elapsed_seconds": 0.261,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 32,
+          "disagreement": {
+            "type": "OVERSPEC",
+            "input": "'a/'",
+            "output": "'a'",
+            "spec_a_verdict": true,
+            "spec_b_verdict": false,
+            "explanation": "implementation output rejected by 'llama' but accepted by the other; the rejecter is OVERspecified"
+          }
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 14,
+          "disagreement": {
+            "type": "EDGE_DRIFT",
+            "input": "''",
+            "output": "'a'",
+            "spec_a_verdict": true,
+            "spec_b_verdict": false,
+            "explanation": "mutated output accepted by 'qwen' but rejected by the other; the accepter is UNDERspecified"
+          }
+        }
+      ]
+    },
+    {
+      "task": "10_path_sanitize",
+      "spec_a": "qwen",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.0929,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 2,
+          "disagreement": {
+            "type": "OVERSPEC",
+            "input": "'a/'",
+            "output": "'a'",
+            "spec_a_verdict": true,
+            "spec_b_verdict": false,
+            "explanation": "implementation output rejected by 'compound' but accepted by the other; the rejecter is OVERspecified"
+          }
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 2,
+          "disagreement": {
+            "type": "EDGE_DRIFT",
+            "input": "''",
+            "output": "'a'",
+            "spec_a_verdict": true,
+            "spec_b_verdict": false,
+            "explanation": "mutated output accepted by 'qwen' but rejected by the other; the accepter is UNDERspecified"
+          }
+        }
+      ]
+    },
+    {
+      "task": "10_path_sanitize",
+      "spec_a": "llama",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.3085,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 23,
+          "disagreement": {
+            "type": "OVERSPEC",
+            "input": "'..'",
+            "output": "''",
+            "spec_a_verdict": false,
+            "spec_b_verdict": true,
+            "explanation": "implementation output rejected by 'llama' but accepted by the other; the rejecter is OVERspecified"
+          }
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 62,
+          "disagreement": {
+            "type": "UNDERSPEC",
+            "input": "'..'",
+            "output": "''",
+            "spec_a_verdict": false,
+            "spec_b_verdict": true,
+            "explanation": "mutated output accepted by 'compound' but rejected by the other; the accepter is UNDERspecified"
+          }
+        }
+      ]
+    },
+    {
+      "task": "11_brd_tiebreaker",
+      "spec_a": "qwen",
+      "spec_b": "llama",
+      "elapsed_seconds": 2.2882,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 216,
+          "disagreement": {
+            "type": "UNDERSPEC",
+            "input": "[(0, 0, 0, 1700000000), (0, 0, 0, 1700000001)]",
+            "output": "[(0, 0, 0, 1700000000), (0, 0, 0, 1700000000)]",
+            "spec_a_verdict": true,
+            "spec_b_verdict": false,
+            "explanation": "mutated output accepted by 'qwen' but rejected by the other; the accepter is UNDERspecified"
+          }
+        }
+      ]
+    },
+    {
+      "task": "11_brd_tiebreaker",
+      "spec_a": "qwen",
+      "spec_b": "gpt-oss",
+      "elapsed_seconds": 0.222,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 2,
+          "disagreement": {
+            "type": "UNDERSPEC",
+            "input": "[(0, 0, 0, 1700000000), (0, 0, 0, 1700000001)]",
+            "output": "[(0, 0, 0, 1700000000), (0, 0, 0, 1700000000)]",
+            "spec_a_verdict": true,
+            "spec_b_verdict": false,
+            "explanation": "mutated output accepted by 'qwen' but rejected by the other; the accepter is UNDERspecified"
+          }
+        }
+      ]
+    },
+    {
+      "task": "11_brd_tiebreaker",
+      "spec_a": "qwen",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.2126,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 2,
+          "disagreement": {
+            "type": "UNDERSPEC",
+            "input": "[(0, 0, 0, 1700000000), (0, 0, 0, 1700000001)]",
+            "output": "[(0, 0, 0, 1700000000), (0, 0, 0, 1700000000)]",
+            "spec_a_verdict": true,
+            "spec_b_verdict": false,
+            "explanation": "mutated output accepted by 'qwen' but rejected by the other; the accepter is UNDERspecified"
+          }
+        }
+      ]
+    },
+    {
+      "task": "11_brd_tiebreaker",
+      "spec_a": "llama",
+      "spec_b": "gpt-oss",
+      "elapsed_seconds": 0.5103,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "11_brd_tiebreaker",
+      "spec_a": "llama",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.5231,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    },
+    {
+      "task": "11_brd_tiebreaker",
+      "spec_a": "gpt-oss",
+      "spec_b": "compound",
+      "elapsed_seconds": 0.539,
+      "load_errors": [],
+      "checks": [
+        {
+          "check": "precondition",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "soundness",
+          "examples_tried": 80,
+          "disagreement": null
+        },
+        {
+          "check": "uniqueness",
+          "examples_tried": 150,
+          "disagreement": null
+        }
+      ]
+    }
+  ],
+  "tasks_total": 11,
+  "tasks_with_any_drift": 7,
+  "tasks_drift_rate": 0.6363636363636364,
+  "by_pair": {
+    "qwen-llama": {
+      "tasks_evaluated": 11,
+      "tasks_with_drift": 6
+    },
+    "qwen-gpt-oss": {
+      "tasks_evaluated": 9,
+      "tasks_with_drift": 4
+    },
+    "qwen-compound": {
+      "tasks_evaluated": 9,
+      "tasks_with_drift": 5
+    },
+    "llama-gpt-oss": {
+      "tasks_evaluated": 9,
+      "tasks_with_drift": 1
+    },
+    "llama-compound": {
+      "tasks_evaluated": 9,
+      "tasks_with_drift": 3
+    },
+    "gpt-oss-compound": {
+      "tasks_evaluated": 8,
+      "tasks_with_drift": 1
+    }
+  },
+  "tasks_detail": [
+    {
+      "task": "01_sort",
+      "available_models": [
+        "qwen",
+        "llama",
+        "gpt-oss",
+        "compound"
+      ],
+      "pairs_evaluated": 6,
+      "pairs_with_drift": 0,
+      "any_drift": false,
+      "drift_types": [],
+      "pair_results": [
+        {
+          "pair": "qwen-llama",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.591,
+          "examples_to_first": null
+        },
+        {
+          "pair": "qwen-gpt-oss",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.394,
+          "examples_to_first": null
+        },
+        {
+          "pair": "qwen-compound",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.382,
+          "examples_to_first": null
+        },
+        {
+          "pair": "llama-gpt-oss",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.525,
+          "examples_to_first": null
+        },
+        {
+          "pair": "llama-compound",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.361,
+          "examples_to_first": null
+        },
+        {
+          "pair": "gpt-oss-compound",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.365,
+          "examples_to_first": null
+        }
+      ]
+    },
+    {
+      "task": "02_dedup",
+      "available_models": [
+        "qwen",
+        "llama",
+        "gpt-oss",
+        "compound"
+      ],
+      "pairs_evaluated": 6,
+      "pairs_with_drift": 0,
+      "any_drift": false,
+      "drift_types": [],
+      "pair_results": [
+        {
+          "pair": "qwen-llama",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.389,
+          "examples_to_first": null
+        },
+        {
+          "pair": "qwen-gpt-oss",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.365,
+          "examples_to_first": null
+        },
+        {
+          "pair": "qwen-compound",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.336,
+          "examples_to_first": null
+        },
+        {
+          "pair": "llama-gpt-oss",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.358,
+          "examples_to_first": null
+        },
+        {
+          "pair": "llama-compound",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.388,
+          "examples_to_first": null
+        },
+        {
+          "pair": "gpt-oss-compound",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.323,
+          "examples_to_first": null
+        }
+      ]
+    },
+    {
+      "task": "03_binary_search",
+      "available_models": [
+        "qwen",
+        "llama",
+        "gpt-oss",
+        "compound"
+      ],
+      "pairs_evaluated": 6,
+      "pairs_with_drift": 3,
+      "any_drift": true,
+      "drift_types": [
+        "EDGE_DRIFT",
+        "UNDERSPEC"
+      ],
+      "pair_results": [
+        {
+          "pair": "qwen-llama",
+          "found": true,
+          "types": [
+            "EDGE_DRIFT"
+          ],
+          "elapsed_seconds": 0.473,
+          "examples_to_first": 72
+        },
+        {
+          "pair": "qwen-gpt-oss",
+          "found": true,
+          "types": [
+            "EDGE_DRIFT",
+            "UNDERSPEC"
+          ],
+          "elapsed_seconds": 0.812,
+          "examples_to_first": 2
+        },
+        {
+          "pair": "qwen-compound",
+          "found": true,
+          "types": [
+            "EDGE_DRIFT",
+            "UNDERSPEC"
+          ],
+          "elapsed_seconds": 0.091,
+          "examples_to_first": 2
+        },
+        {
+          "pair": "llama-gpt-oss",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.334,
+          "examples_to_first": null
+        },
+        {
+          "pair": "llama-compound",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.341,
+          "examples_to_first": null
+        },
+        {
+          "pair": "gpt-oss-compound",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.312,
+          "examples_to_first": null
+        }
+      ]
+    },
+    {
+      "task": "04_kth_smallest",
+      "available_models": [
+        "qwen",
+        "llama",
+        "gpt-oss",
+        "compound"
+      ],
+      "pairs_evaluated": 6,
+      "pairs_with_drift": 3,
+      "any_drift": true,
+      "drift_types": [
+        "PRECOND_MISMATCH"
+      ],
+      "pair_results": [
+        {
+          "pair": "qwen-llama",
+          "found": true,
+          "types": [
+            "PRECOND_MISMATCH"
+          ],
+          "elapsed_seconds": 0.636,
+          "examples_to_first": 156
+        },
+        {
+          "pair": "qwen-gpt-oss",
+          "found": true,
+          "types": [
+            "PRECOND_MISMATCH"
+          ],
+          "elapsed_seconds": 0.275,
+          "examples_to_first": 2
+        },
+        {
+          "pair": "qwen-compound",
+          "found": true,
+          "types": [
+            "PRECOND_MISMATCH"
+          ],
+          "elapsed_seconds": 0.333,
+          "examples_to_first": 2
+        },
+        {
+          "pair": "llama-gpt-oss",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.341,
+          "examples_to_first": null
+        },
+        {
+          "pair": "llama-compound",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.325,
+          "examples_to_first": null
+        },
+        {
+          "pair": "gpt-oss-compound",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.32,
+          "examples_to_first": null
+        }
+      ]
+    },
+    {
+      "task": "05_merge_sorted",
+      "available_models": [
+        "qwen",
+        "llama"
+      ],
+      "pairs_evaluated": 1,
+      "pairs_with_drift": 0,
+      "any_drift": false,
+      "drift_types": [],
+      "pair_results": [
+        {
+          "pair": "qwen-llama",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.415,
+          "examples_to_first": null
+        }
+      ]
+    },
+    {
+      "task": "06_tokenizer_truncate",
+      "available_models": [
+        "qwen",
+        "llama",
+        "gpt-oss"
+      ],
+      "pairs_evaluated": 3,
+      "pairs_with_drift": 2,
+      "any_drift": true,
+      "drift_types": [
+        "UNDERSPEC"
+      ],
+      "pair_results": [
+        {
+          "pair": "qwen-llama",
+          "found": true,
+          "types": [
+            "UNDERSPEC"
+          ],
+          "elapsed_seconds": 0.346,
+          "examples_to_first": 33
+        },
+        {
+          "pair": "qwen-gpt-oss",
+          "found": true,
+          "types": [
+            "UNDERSPEC"
+          ],
+          "elapsed_seconds": 0.164,
+          "examples_to_first": 2
+        },
+        {
+          "pair": "llama-gpt-oss",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.359,
+          "examples_to_first": null
+        }
+      ]
+    },
+    {
+      "task": "07_prompt_priority",
+      "available_models": [
+        "qwen",
+        "llama",
+        "gpt-oss",
+        "compound"
+      ],
+      "pairs_evaluated": 6,
+      "pairs_with_drift": 3,
+      "any_drift": true,
+      "drift_types": [
+        "PRECOND_MISMATCH"
+      ],
+      "pair_results": [
+        {
+          "pair": "qwen-llama",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.489,
+          "examples_to_first": null
+        },
+        {
+          "pair": "qwen-gpt-oss",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.378,
+          "examples_to_first": null
+        },
+        {
+          "pair": "qwen-compound",
+          "found": true,
+          "types": [
+            "PRECOND_MISMATCH"
+          ],
+          "elapsed_seconds": 0.688,
+          "examples_to_first": 112
+        },
+        {
+          "pair": "llama-gpt-oss",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.332,
+          "examples_to_first": null
+        },
+        {
+          "pair": "llama-compound",
+          "found": true,
+          "types": [
+            "PRECOND_MISMATCH"
+          ],
+          "elapsed_seconds": 0.659,
+          "examples_to_first": 112
+        },
+        {
+          "pair": "gpt-oss-compound",
+          "found": true,
+          "types": [
+            "PRECOND_MISMATCH"
+          ],
+          "elapsed_seconds": 0.261,
+          "examples_to_first": 2
+        }
+      ]
+    },
+    {
+      "task": "08_permission_check",
+      "available_models": [
+        "qwen",
+        "llama",
+        "gpt-oss",
+        "compound"
+      ],
+      "pairs_evaluated": 6,
+      "pairs_with_drift": 0,
+      "any_drift": false,
+      "drift_types": [],
+      "pair_results": [
+        {
+          "pair": "qwen-llama",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.337,
+          "examples_to_first": null
+        },
+        {
+          "pair": "qwen-gpt-oss",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.326,
+          "examples_to_first": null
+        },
+        {
+          "pair": "qwen-compound",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.329,
+          "examples_to_first": null
+        },
+        {
+          "pair": "llama-gpt-oss",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.34,
+          "examples_to_first": null
+        },
+        {
+          "pair": "llama-compound",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.335,
+          "examples_to_first": null
+        },
+        {
+          "pair": "gpt-oss-compound",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.382,
+          "examples_to_first": null
+        }
+      ]
+    },
+    {
+      "task": "09_rate_limit",
+      "available_models": [
+        "qwen",
+        "llama",
+        "gpt-oss",
+        "compound"
+      ],
+      "pairs_evaluated": 6,
+      "pairs_with_drift": 3,
+      "any_drift": true,
+      "drift_types": [
+        "PRECOND_MISMATCH"
+      ],
+      "pair_results": [
+        {
+          "pair": "qwen-llama",
+          "found": true,
+          "types": [
+            "PRECOND_MISMATCH"
+          ],
+          "elapsed_seconds": 0.443,
+          "examples_to_first": 95
+        },
+        {
+          "pair": "qwen-gpt-oss",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.241,
+          "examples_to_first": null
+        },
+        {
+          "pair": "qwen-compound",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.238,
+          "examples_to_first": null
+        },
+        {
+          "pair": "llama-gpt-oss",
+          "found": true,
+          "types": [
+            "PRECOND_MISMATCH"
+          ],
+          "elapsed_seconds": 0.434,
+          "examples_to_first": 95
+        },
+        {
+          "pair": "llama-compound",
+          "found": true,
+          "types": [
+            "PRECOND_MISMATCH"
+          ],
+          "elapsed_seconds": 0.214,
+          "examples_to_first": 2
+        },
+        {
+          "pair": "gpt-oss-compound",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.228,
+          "examples_to_first": null
+        }
+      ]
+    },
+    {
+      "task": "10_path_sanitize",
+      "available_models": [
+        "qwen",
+        "llama",
+        "compound"
+      ],
+      "pairs_evaluated": 3,
+      "pairs_with_drift": 3,
+      "any_drift": true,
+      "drift_types": [
+        "EDGE_DRIFT",
+        "OVERSPEC",
+        "UNDERSPEC"
+      ],
+      "pair_results": [
+        {
+          "pair": "qwen-llama",
+          "found": true,
+          "types": [
+            "EDGE_DRIFT",
+            "OVERSPEC"
+          ],
+          "elapsed_seconds": 0.261,
+          "examples_to_first": 32
+        },
+        {
+          "pair": "qwen-compound",
+          "found": true,
+          "types": [
+            "EDGE_DRIFT",
+            "OVERSPEC"
+          ],
+          "elapsed_seconds": 0.093,
+          "examples_to_first": 2
+        },
+        {
+          "pair": "llama-compound",
+          "found": true,
+          "types": [
+            "OVERSPEC",
+            "UNDERSPEC"
+          ],
+          "elapsed_seconds": 0.308,
+          "examples_to_first": 23
+        }
+      ]
+    },
+    {
+      "task": "11_brd_tiebreaker",
+      "available_models": [
+        "qwen",
+        "llama",
+        "gpt-oss",
+        "compound"
+      ],
+      "pairs_evaluated": 6,
+      "pairs_with_drift": 3,
+      "any_drift": true,
+      "drift_types": [
+        "UNDERSPEC"
+      ],
+      "pair_results": [
+        {
+          "pair": "qwen-llama",
+          "found": true,
+          "types": [
+            "UNDERSPEC"
+          ],
+          "elapsed_seconds": 2.288,
+          "examples_to_first": 216
+        },
+        {
+          "pair": "qwen-gpt-oss",
+          "found": true,
+          "types": [
+            "UNDERSPEC"
+          ],
+          "elapsed_seconds": 0.222,
+          "examples_to_first": 2
+        },
+        {
+          "pair": "qwen-compound",
+          "found": true,
+          "types": [
+            "UNDERSPEC"
+          ],
+          "elapsed_seconds": 0.213,
+          "examples_to_first": 2
+        },
+        {
+          "pair": "llama-gpt-oss",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.51,
+          "examples_to_first": null
+        },
+        {
+          "pair": "llama-compound",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.523,
+          "examples_to_first": null
+        },
+        {
+          "pair": "gpt-oss-compound",
+          "found": false,
+          "types": [],
+          "elapsed_seconds": 0.539,
+          "examples_to_first": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "timestamp_utc": "2026-05-25T00:36:38Z",
+  "elapsed_seconds": 2,
+  "extract_status": "ok",
+  "usage": {
+    "queue_time": 0.018113468,
+    "prompt_tokens": 236,
+    "prompt_time": 0.008968219,
+    "completion_tokens": 738,
+    "completion_time": 1.533415993,
+    "total_tokens": 974,
+    "total_time": 1.542384212,
+    "completion_tokens_details": {
+      "reasoning_tokens": 512
+    }
+  },
+  "reasoning_chars": 2106,
+  "content_chars": 888,
+  "response": {
+    "id": "chatcmpl-622b0009-fbe0-429d-b32d-1a3724592d05",
+    "object": "chat.completion",
+    "created": 1779669398,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "def pre(i):\n    if not isinstance(i, tuple) or len(i) != 3:\n        return False\n    system_prompt, user_prompt, retrieved_sources = i\n    if not isinstance(system_prompt, str) or not isinstance(user_prompt, str):\n        return False\n    if not isinstance(retrieved_sources, (list, tuple)):\n        return False\n    for src in retrieved_sources:\n        if not isinstance(src, str):\n            return False\n    return True\n\ndef post(i, o):\n    if not pre(i):\n        return False\n    system_prompt, user_prompt, retrieved_sources = i\n    if not isinstance(o, list):\n        return False\n    if len(o) != 2 + len(retrieved_sources):\n        return False\n    if o[0] != system_prompt or o[1] != user_prompt:\n        return False\n    if o[2:] != list(retrieved_sources):\n        return False\n    for elem in o:\n        if not isinstance(elem, str):\n            return False\n    return True",
+          "reasoning": "We need to produce Python functions pre(i) and post(i,o). The requirement: \"Prompt Priority Assembly: Given a system prompt, a user prompt, and an ordered list of retrieved sources, assemble a single context list of strings in priority order: system first, then user, then retrieved sources in their given order.\"\n\nWe need to define what input i is. Likely a tuple or dict containing system_prompt, user_prompt, retrieved_sources. The pre should check validity: system_prompt is a string, user_prompt is a string, retrieved_sources is a list (or iterable) of strings. Also ensure order? Not needed.\n\npost(i,o) should check that o is a list of strings where first element equals system_prompt, second equals user_prompt, then the rest equal retrieved_sources in order.\n\nThus implement pre(i): accept any object; we can expect i to be a dict with keys 'system', 'user', 'sources' maybe. But we need to define based on requirement. Could define i as a tuple (system, user, sources). Simpler: i is a tuple of three elements: system_prompt (str), user_prompt (str), retrieved_sources (list of str). We'll check that.\n\npost(i,o): check that o is list of strings, length = 2 + len(sources), and o[0]==system, o[1]==user, and o[2:]==sources.\n\nImplement accordingly.\n\nEdge cases: ensure each source is string.\n\nWrite code:\n\ndef pre(i):\n    if not isinstance(i, tuple) or len(i)!=3: return False\n    system, user, sources = i\n    if not isinstance(system, str) or not isinstance(user, str): return False\n    if not isinstance(sources, (list, tuple)): return False\n    for s in sources:\n        if not isinstance(s, str):\n            return False\n    return True\n\ndef post(i,o):\n    if not pre(i): return False\n    system, user, sources = i\n    if not isinstance(o, list): return False\n    if len(o) != 2 + len(sources): return False\n    if o[0] != system or o[1] != user: return False\n    if o[2:] != list(sources): return False\n    # also ensure each element is string\n    for elem in o:\n        if not isinstance(elem, str):\n            return False\n    return True\n\nThat's it. Ensure no imports. Output only code."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.018113468,
+      "prompt_tokens": 236,
+      "prompt_time": 0.008968219,
+      "completion_tokens": 738,
+      "completion_time": 1.533415993,
+      "total_tokens": 974,
+      "total_time": 1.542384212,
+      "completion_tokens_details": {
+        "reasoning_tokens": 512
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_87b3c396db",
+    "x_groq": {
+      "id": "req_01kse8zvvvecgtee3z0wvk4c58",
+      "seed": 1256370528
+    },
+    "service_tier": "on_demand"
+  }
+}

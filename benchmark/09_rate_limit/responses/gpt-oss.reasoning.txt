@@ -1,0 +1,15 @@
+We need to produce Python functions pre(i) and post(i,o). Input i likely is a tuple or dict containing count, limit, rolled. Need to define what is valid input: count, limit are non-negative integers? rolled is boolean. So pre(i) returns True iff i is a tuple/list/dict with appropriate types and constraints: count >=0, limit >=0, rolled is bool. Also maybe limit >0? Not necessarily. We'll assume limit is non-negative integer.
+
+post(i,o) returns True iff o is boolean and matches the rule: if rolled is True (window just rolled over), then always True (allow). Else (rolled False) then allowed iff count < limit.
+
+Also note that on fresh window, count is implicitly reset, but we don't have count value? Actually rolled indicates fresh window, so we ignore count. So rule: if rolled: o must be True. else: o == (count < limit).
+
+Implement pre(i): accept i as a dict with keys 'count','limit','rolled' or a tuple of length 3. Simpler: assume i is a tuple (count, limit, rolled). We'll define pre expects a tuple of length 3. Validate types.
+
+post(i,o): first check pre(i) and isinstance(o,bool). Then compute expected.
+
+Return bool.
+
+Write code.
+
+

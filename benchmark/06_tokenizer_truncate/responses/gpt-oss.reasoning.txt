@@ -1,0 +1,29 @@
+We need to produce Python functions pre(i) and post(i,o). Input i is a natural-language requirement? Actually we need to formalize the requirement: "Given a list of token IDs and a non-negative integer N, return the prefix of the input containing at most N tokens. The result must be exactly the first min(N, len(tokens)) tokens, in order."
+
+So pre(i) should check that i is a valid input: i should be a tuple (tokens, N) where tokens is a list of ints (token IDs) and N is a non-negative integer. Also maybe we need to ensure tokens is a list (or sequence) of ints. So pre returns True if i matches that.
+
+post(i,o) should check that o is the correct output: o must be a list of ints equal to tokens[:min(N, len(tokens))] preserving order.
+
+Thus implement:
+
+def pre(i):
+    if not isinstance(i, tuple) or len(i)!=2: return False
+    tokens, N = i
+    if not isinstance(tokens, list): return False
+    if not all(isinstance(t, int) for t in tokens): return False
+    if not isinstance(N, int) or N < 0: return False
+    return True
+
+post(i,o):
+    if not pre(i): return False (maybe not needed but okay)
+    tokens, N = i
+    expected = tokens[:min(N, len(tokens))]
+    return isinstance(o, list) and o == expected
+
+Make sure to import nothing.
+
+Edge cases: tokens may be empty list; N may be zero; N may be larger than len(tokens). Works.
+
+Return True/False.
+
+Thus output code.

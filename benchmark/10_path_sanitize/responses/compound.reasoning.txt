@@ -1,0 +1,9 @@
+```python
+def pre(path):
+    return isinstance(path, str)
+
+def post(path, sanitized_path):
+    if not pre(path):
+        return False
+    return not sanitized_path.startswith('/') and '..' not in sanitized_path and '\x00' not in sanitized_path
+```

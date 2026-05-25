@@ -1,0 +1,54 @@
+We need to produce Python functions pre(i) and post(i,o). Input i presumably is a tuple containing the list and target? The requirement: "Given a sorted list of integers and a target, return the index of the target in the list, or -1 if not present." So pre should check that i is a valid input: i is a tuple (list, target) where list is sorted list of integers (non-decreasing) and target is an integer. Also list may be empty. Ensure all elements are ints. Also sorted ascending.
+
+post(i,o) should check that o is correct output: if target present, o equals index of first occurrence? Since list sorted, duplicates possible. Usually binary search returns any index where target occurs; but we can define that it returns the index of target if present, else -1. For duplicates, any index is acceptable. But we need deterministic spec: we can require that if target appears, o is an index j such that 0 <= j < len(list) and list[j] == target. If not present, o == -1.
+
+Thus implement pre(i): check isinstance(i, tuple) length 2; list part is list; all elements ints; sorted non-decreasing; target int.
+
+post(i,o): if not pre(i) return False? Usually post only defined for valid input; but we can still check pre(i) first. Then compute correct condition.
+
+Implementation:
+
+def pre(i):
+    if not isinstance(i, tuple) or len(i)!=2: return False
+    lst, target = i
+    if not isinstance(lst, list): return False
+    if not isinstance(target, int): return False
+    # check each element int
+    for x in lst:
+        if not isinstance(x, int):
+            return False
+    # check sorted non-decreasing
+    for a,b in zip(lst, lst[1:]):
+        if a > b:
+            return False
+    return True
+
+post(i,o):
+    if not pre(i): return False
+    lst, target = i
+    if not isinstance(o, int): return False
+    # find correct indices
+    try:
+        idx = lst.index(target)
+        # if target present, o must be any index where lst[o]==target
+        # we can check that o in range and lst[o]==target
+        return 0 <= o < len(lst) and lst[o] == target
+    except ValueError:
+        return o == -1
+
+But need to handle duplicates: index returns first occurrence, but we accept any index. So we can check existence: if target in lst: then o must be int within range and lst[o]==target. else o==-1.
+
+Implementation:
+
+if target in lst:
+    return isinstance(o, int) and 0 <= o < len(lst) and lst[o] == target
+else:
+    return o == -1
+
+Make sure o is int.
+
+Edge cases: empty list: target not present, o must be -1.
+
+Return bool.
+
+Thus final code.

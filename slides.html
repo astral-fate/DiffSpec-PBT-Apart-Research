@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DiffSpec-PBT — Differential Property-Based Spec Validation</title>
+<style>
+  :root {
+    --bg: #06070d; --bg-2: #0d1020; --fg: #e9ecf3; --muted: #8c93a8;
+    --accent: #22d3ee; --accent-2: #818cf8;
+    --good: #4ade80; --warn: #fbbf24; --bad: #f87171;
+    --line: rgba(255,255,255,0.10); --code-bg: #0a0d1c;
+    --grid: rgba(34,211,238,0.05);
+    --shadow: 0 30px 80px -20px rgba(34,211,238,0.18);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; background: var(--bg); color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; scroll-behavior: smooth;
+  }
+  .slide {
+    position: relative; width: 100%; min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 80px 96px 96px;
+    background: radial-gradient(ellipse at top, #0e1430 0%, var(--bg) 60%);
+    overflow: hidden; page-break-after: always; break-after: page;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .slide::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  }
+  .slide > * { position: relative; z-index: 1; }
+
+  .slide-brand { position: absolute; left: 96px; top: 30px; z-index: 2;
+    font-size: 11px; letter-spacing: .25em; text-transform: uppercase; color: var(--muted); }
+  .slide-brand b { color: var(--fg); font-weight: 600; }
+  .slide-num { position: absolute; right: 96px; top: 30px; z-index: 2;
+    font-family: ui-monospace, monospace; font-size: 12px; color: var(--muted); }
+
+  .eyebrow {
+    display: inline-block; align-self: flex-start;
+    font-size: 11px; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--accent);
+    padding: 5px 10px; border: 1px solid rgba(34,211,238,0.3); border-radius: 999px;
+    margin-bottom: 22px; background: rgba(34,211,238,0.05);
+  }
+  h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -.01em; }
+  h1 {
+    font-size: clamp(40px, 5.8vw, 78px); line-height: 1.04;
+    background: linear-gradient(135deg, #ffffff 0%, #a4b1d9 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  h2 { font-size: clamp(28px, 3.2vw, 44px); line-height: 1.15; margin-bottom: 24px; }
+  h3 { font-size: clamp(16px, 1.5vw, 20px); color: var(--muted); font-weight: 500; }
+  p { font-size: clamp(15px, 1.25vw, 19px); line-height: 1.55; color: #cdd3e3; }
+  p.lede { font-size: clamp(18px, 1.55vw, 24px); color: #dde2f0; max-width: 880px; }
+
+  ul.bullets { list-style: none; padding: 0; margin: 22px 0 0; }
+  ul.bullets li {
+    font-size: clamp(15px, 1.25vw, 19px); line-height: 1.55; color: #cdd3e3;
+    padding: 9px 0 9px 28px; position: relative;
+  }
+  ul.bullets li::before {
+    content: ""; position: absolute; left: 0; top: 19px; width: 10px; height: 10px;
+    border: 2px solid var(--accent); border-radius: 50%;
+    box-shadow: 0 0 12px rgba(34,211,238,0.35);
+  }
+  ul.bullets li b { color: #ffffff; font-weight: 600; }
+
+  .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+  .columns.three { grid-template-columns: 1fr 1fr 1fr; gap: 36px; }
+
+  pre.code {
+    margin: 0; padding: 18px 22px;
+    background: var(--code-bg); border: 1px solid var(--line); border-radius: 12px;
+    font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    font-size: clamp(12px, 1vw, 14.5px); line-height: 1.55; color: #d6dcec;
+    overflow: hidden; white-space: pre;
+  }
+  .code .k { color: #c084fc; } .code .s { color: #86efac; }
+  .code .n { color: #fcd34d; } .code .c { color: #64748b; font-style: italic; }
+  .code .b { color: #f87171; font-weight: 600; } .code .ok { color: var(--good); font-weight: 600; }
+
+  .tile { border: 1px solid var(--line); border-radius: 14px; padding: 22px;
+          background: linear-gradient(160deg, rgba(255,255,255,0.02), rgba(255,255,255,0)); }
+  .tile h3 { color: var(--accent); font-size: 14px; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; }
+  .tile.good { border-color: rgba(74,222,128,0.4); background: rgba(74,222,128,0.04); }
+  .tile.good h3 { color: var(--good); }
+  .tile.warn { border-color: rgba(251,191,36,0.4); background: rgba(251,191,36,0.04); }
+  .tile.warn h3 { color: var(--warn); }
+  .tile.bad  { border-color: rgba(248,113,113,0.4); background: rgba(248,113,113,0.04); }
+  .tile.bad h3 { color: var(--bad); }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 30px; }
+  .stat { padding: 22px; border: 1px solid var(--line); border-radius: 14px;
+          background: linear-gradient(180deg, rgba(34,211,238,0.06), rgba(34,211,238,0)); }
+  .stat .v {
+    font-size: clamp(34px, 4vw, 56px); font-weight: 700; line-height: 1; letter-spacing: -.02em;
+    background: linear-gradient(135deg, #22d3ee, #818cf8);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .stat .l { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: .12em; margin-top: 10px; }
+
+  table.cmp { border-collapse: collapse; width: 100%; margin-top: 24px; font-size: 14px; }
+  table.cmp th, table.cmp td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+  table.cmp th { color: var(--muted); font-weight: 500; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+  table.cmp td.deny { color: var(--bad); font-weight: 600; }
+  table.cmp td.allow { color: var(--good); font-weight: 600; }
+
+  .figbox { border: 1px solid var(--line); border-radius: 16px;
+            background: rgba(255,255,255,0.015); padding: 18px;
+            display: flex; align-items: center; justify-content: center; }
+
+  .term { background: #07080f; border: 1px solid var(--line); border-radius: 12px;
+          box-shadow: var(--shadow);
+          font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+          font-size: 13.5px; line-height: 1.55; color: #cfd5e6; overflow: hidden; }
+  .term .head { background: #0b0d18; padding: 8px 14px; border-bottom: 1px solid var(--line);
+                color: var(--muted); font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+                display: flex; gap: 8px; align-items: center; }
+  .term .head .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .term .head .dot.r { background: #ef4444; } .term .head .dot.y { background: #eab308; } .term .head .dot.g { background: #22c55e; }
+  .term .body { padding: 20px 22px; white-space: pre-wrap; min-height: 320px; }
+  .term .prompt { color: var(--accent); } .term .ok { color: var(--good); }
+  .term .err { color: var(--bad); } .term .dim { color: var(--muted); }
+  .term .k { color: #c084fc; } .term .s { color: #86efac; }
+  .term .b { color: var(--bad); font-weight: 600; }
+
+  .center { text-align: center; align-items: center; justify-content: center; }
+  .center > * { align-self: center; }
+  .signature { display: flex; gap: 24px; align-items: center; margin-top: 36px;
+               color: var(--muted); justify-content: center; flex-wrap: wrap; }
+  .signature .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%;
+                    box-shadow: 0 0 16px var(--accent); }
+
+  svg .lbl { font-family: ui-monospace, monospace; font-size: 12px; fill: #8c93a8; }
+  svg .ttl { font-family: ui-sans-serif, system-ui; font-size: 13px; fill: #e9ecf3; font-weight: 600; }
+  svg .box { fill: rgba(255,255,255,0.02); stroke: rgba(255,255,255,0.10); stroke-width: 1.2; rx: 8; }
+  svg .box.accent { stroke: #22d3ee; fill: rgba(34,211,238,0.06); }
+  svg .box.good { stroke: #4ade80; fill: rgba(74,222,128,0.06); }
+  svg .box.bad  { stroke: #f87171; fill: rgba(248,113,113,0.06); }
+  svg .arrow { stroke: #22d3ee; stroke-width: 1.6; fill: none; }
+
+  @media (max-width: 1100px) {
+    .slide { padding: 60px 50px 80px; }
+    .columns, .columns.three { grid-template-columns: 1fr; gap: 28px; }
+    .stats { grid-template-columns: 1fr 1fr; }
+  }
+  @page { size: A4 landscape; margin: 0; }
+  @media print {
+    html, body { background: #0a0d1c; }
+    .slide { page-break-after: always; break-after: page;
+             min-height: 100vh; height: 100vh; box-shadow: none; border-bottom: none;
+             -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .slide:last-child { page-break-after: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 1. TITLE -->
+<section class="slide center">
+  <div class="eyebrow">Apart × Atlas — Secure Program Synthesis Hackathon · Track 2</div>
+  <h1>DiffSpec-PBT</h1>
+  <h3 style="margin-top: 18px; max-width: 880px;">
+    Validating LLM-generated formal specifications via differential
+    property-based testing. Cross-model diversity is the oracle.
+  </h3>
+  <div class="signature">
+    <span class="dot"></span>
+    <span><b style="color:#e9ecf3;">Fatimah Emad Eldin</b> &nbsp;·&nbsp; Independent AI Researcher</span>
+    <span class="dot"></span>
+  </div>
+</section>
+
+<!-- 2. PROBLEM -->
+<section class="slide">
+  <div class="slide-brand"><b>DiffSpec-PBT</b> · The Problem</div>
+  <div class="slide-num">02 / 16</div>
+  <div class="eyebrow">The Problem</div>
+  <h2>Proofs are cheap. Specs are not.</h2>
+  <p class="lede">
+    LLMs can generate formal pre/post-condition specs. No-one can tell if a
+    generated spec actually captures intent. Verify the wrong spec and you
+    launder a bug into a theorem.
+  </p>
+  <ul class="bullets" style="margin-top: 28px;">
+    <li><b>SPOTs / SMT-based validation</b> works but requires decidability and a second spec — re-introduces the same bottleneck.</li>
+    <li><b>Feng & Sergey 2026</b> show PBT is unreasonably effective at validating <i>human-written</i> Lean specs.</li>
+    <li><b>Our move:</b> use PBT on <i>LLM-generated</i> specs — and use a <i>second LLM's</i> spec as the oracle.</li>
+  </ul>
+</section>
+
+<!-- 3. INSIGHT -->
+<section class="slide center">
+  <div class="slide-brand"><b>DiffSpec-PBT</b> · Insight</div>
+  <div class="slide-num">03 / 16</div>
+  <div class="eyebrow">Insight</div>
+  <h1 style="max-width:1100px;">
+    Two LLMs disagree. <span style="background:linear-gradient(135deg,#22d3ee,#818cf8);-webkit-background-clip:text;background-clip:text;color:transparent;">PBT shows you where.</span>
+  </h1>
+  <p class="lede" style="margin-top:22px;max-width:820px;">
+    Prompt Qwen3-Coder and Llama 3.3 with the same requirement.
+    They produce different pre/post-conditions. Property-based testing
+    surfaces a concrete input/output on which they disagree — a witness
+    of intent drift.
+  </p>
+  <p style="margin-top:18px;color:var(--muted);max-width:820px;">
+    No SMT. No Lean. No golden reference. No manual proof effort.
+  </p>
+</section>
+
+<!-- 4. ARCHITECTURE -->
+<section class="slide">
+  <div class="slide-brand"><b>DiffSpec-PBT</b> · Architecture</div>
+  <div class="slide-num">04 / 16</div>
+  <div class="eyebrow">Architecture</div>
+  <h2>One requirement, two specs, three checks.</h2>
+  <div class="figbox" style="margin-top: 16px; padding: 30px 20px;">
+    <svg viewBox="0 0 1000 320" width="100%" height="320">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#22d3ee"></path>
+        </marker>
+      </defs>
+      <rect class="box" x="30" y="125" width="200" height="70" />
+      <text class="ttl" x="130" y="155" text-anchor="middle">requirement.md</text>
+      <text class="lbl" x="130" y="178" text-anchor="middle">natural language</text>
+
+      <rect class="box accent" x="310" y="40"  width="200" height="70" />
+      <text class="ttl" x="410" y="68" text-anchor="middle">Qwen3-Coder 480B</text>
+      <text class="lbl" x="410" y="92" text-anchor="middle">on NVIDIA NIM</text>
+
+      <rect class="box accent" x="310" y="210" width="200" height="70" />
+      <text class="ttl" x="410" y="238" text-anchor="middle">Llama 3.3 70B</text>
+      <text class="lbl" x="410" y="262" text-anchor="middle">on NVIDIA NIM</text>
+
+      <rect class="box good" x="590" y="125" width="200" height="70" />
+      <text class="ttl" x="690" y="148" text-anchor="middle">DiffSpec Differ</text>
+      <text class="lbl" x="690" y="168" text-anchor="middle">soundness · uniqueness</text>
+      <text class="lbl" x="690" y="184" text-anchor="middle">· precondition</text>
+
+      <rect class="box bad" x="855" y="125" width="120" height="70" />
+      <text class="ttl" x="915" y="155" text-anchor="middle">Disagreement</text>
+      <text class="lbl" x="915" y="175" text-anchor="middle">+ witness</text>
+
+      <path class="arrow" d="M 230 145 Q 270 100 310 75"  marker-end="url(#arr)"/>
+      <path class="arrow" d="M 230 175 Q 270 220 310 245" marker-end="url(#arr)"/>
+      <path class="arrow" d="M 510 75 Q 555 110 590 145"  marker-end="url(#arr)"/>
+      <path class="arrow" d="M 510 245 Q 555 210 590 175" marker-end="url(#arr)"/>
+      <path class="arrow" d="M 790 160 L 855 160"          marker-end="url(#arr)"/>
+
+      <text class="lbl" x="410" y="125" text-anchor="middle">spec_qwen</text>
+      <text class="lbl" x="410" y="200" text-anchor="middle">spec_llama</text>
+    </svg>
+  </div>
+  <ul class="bullets" style="margin-top:14px;">
+    <li><b>NVIDIA NIM</b> as the LLM fabric — OpenAI-compatible, two different model families.</li>
+    <li><b>Fixture mode by default</b> — headline numbers reproduce with no API key.</li>
+    <li><b>Live mode</b> regenerates fixtures via <code>bash scripts/gen_fixtures.sh</code>.</li>
+  </ul>
+</section>
+
+<!-- 5. THREE CHECKS -->
+<section class="slide">
+  <div class="slide-brand"><b>DiffSpec-PBT</b> · The Three Checks</div>
+  <div class="slide-num">05 / 16</div>
+  <div class="eyebrow">Three Checks</div>
+  <h2>Each disagreement carries its own meaning.</h2>
+  <div class="columns three" style="margin-top:22px;">
+    <div class="tile">
+      <h3>① Soundness</h3>
+      <p>Sample input <code>i</code>, compute <code>o = impl(i)</code>. If
+         <code>post_A(i,o) ≠ post_B(i,o)</code>, the rejecting spec is
+         <b>OVER</b>-specified.</p>
+    </div>
+    <div class="tile">
+      <h3>② Uniqueness</h3>
+      <p>Sample input <code>i</code> and <i>mutated</i> output <code>o'</code>.
+         If <code>post_A(i,o') ≠ post_B(i,o')</code>, the accepting spec is
+         <b>UNDER</b>-specified.</p>
+    </div>
+    <div class="tile">
+      <h3>③ Precondition</h3>
+      <p>Find <code>i</code> where <code>pre_A(i) ≠ pre_B(i)</code>.
+         The specs disagree on what counts as a valid input.</p>
+    </div>
+  </div>
+  <p style="margin-top:32px;color:var(--muted);max-width:880px;">
+    Each disagreement is auto-classified into one of five types:
+    <b>OVERSPEC</b>, <b>UNDERSPEC</b>, <b>PRECOND_MISMATCH</b>,
+    <b>EDGE_DRIFT</b>, <b>CRASH</b>.
+  </p>
+</section>
+
+<!-- 6. WHY DIFFERENTIAL -->
+<section class="slide">
+  <div class="slide-brand"><b>DiffSpec-PBT</b> · Why differential</div>
+  <div class="slide-num">06 / 16</div>
+  <div class="eyebrow">Why differential</div>
+  <h2>Cross-model diversity replaces the golden reference.</h2>
+  <div class="columns">
+    <div>
+<pre class="code"><span class="c"># Requirement: truncate a token sequence
+# to at most N tokens.</span>
+
+<span class="c"># Qwen3-Coder produces:</span>
+<span class="k">def</span> <span class="ok">post</span>(i, o):
+    tokens, n = i
+    expected_len = <span class="k">min</span>(n, <span class="k">len</span>(tokens))
+    <span class="k">return</span> o == tokens[:expected_len]
+
+<span class="c"># Llama 3.3 produces:</span>
+<span class="k">def</span> <span class="ok">post</span>(i, o):
+    tokens, n = i
+    <span class="k">return</span> <span class="k">len</span>(o) &lt;= n <span class="k">and</span> \
+           <span class="k">all</span>(x <span class="k">in</span> tokens <span class="k">for</span> x <span class="k">in</span> o)
+
+<span class="c"># PBT finds: input=([0], 1), o'=[]
+# Llama accepts the empty truncation
+# Qwen rejects it
+# → UNDERSPEC of Llama in 46 examples</span></pre>
+    </div>
+    <div>
+      <ul class="bullets" style="margin-top:0;">
+        <li>We <b>never need the right spec</b>. We just need two different wrong ones.</li>
+        <li>Different LLMs have different training-data blind spots, so they tend to make <b>different</b> mistakes.</li>
+        <li>Hypothesis shrinks each counterexample to a <b>minimal</b> witness — the diagnosis is auditable.</li>
+        <li>The only thing the methodology requires is that both specs be <b>executable Python</b>.</li>
+      </ul>
+      <p style="margin-top:24px;color:var(--muted);">
+        Limitation: <b>correlated failure</b>. If both LLMs make the same
+        wrong choice, the differ stays silent. N-way differential and
+        mutation testing of the differ are future work.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 7. BENCHMARK -->
+<section class="slide">
+  <div class="slide-brand"><b>DiffSpec-PBT</b> · Benchmark</div>
+  <div class="slide-num">07 / 16</div>
+  <div class="eyebrow">Benchmark</div>
+  <h2>11 tasks: textbook, security, real-world.</h2>
+  <table class="cmp">
+    <thead>
+      <tr><th>ID</th><th>Task</th><th>Class</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>01–05</td><td>sort · dedup · binary_search · kth_smallest · merge_sorted</td><td>algorithmic</td><td>methodology validation</td></tr>
+      <tr><td>06</td><td>tokenizer_truncate</td><td>security</td><td>first-N tokens, no reorder</td></tr>
+      <tr><td>07</td><td>prompt_priority</td><td>security</td><td>system → user → retrieved order</td></tr>
+      <tr><td>08</td><td>permission_check</td><td>security</td><td>allow-list <b>and</b> active flag</td></tr>
+      <tr><td>09</td><td>rate_limit</td><td>security</td><td>window-rollover handling</td></tr>
+      <tr><td>10</td><td>path_sanitize</td><td>security</td><td>strip <code>..</code>, abs path, null byte</td></tr>
+      <tr style="background:rgba(34,211,238,0.06);">
+        <td><b>11</b></td>
+        <td><b>brd_tiebreaker</b></td>
+        <td><b>real-world</b></td>
+        <td><b>Vamos Argentina BRD §III.8, verbatim</b></td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="margin-top:22px;color:var(--muted);">
+    Task 11 is the methodology's load-bearing test: a real Business
+    Requirements Document, transcribed unmodified into the benchmark.
+  </p>
+</section>
+
+<!-- 8. HEADLINE -->
+<section class="slide">
+  <div class="slide-brand"><b>DiffSpec-PBT</b> · Headline</div>
+  <div class="slide-num">08 / 16</div>
+  <div class="eyebrow">Headline Result</div>
+  <h2>7 / 11 tasks flagged across 4 LLMs in ~22 s.</h2>
+  <div class="stats">
+    <div class="stat"><div class="v">7/11</div><div class="l">tasks (any pair)</div></div>
+    <div class="stat"><div class="v">64%</div><div class="l">drift rate</div></div>
+    <div class="stat"><div class="v">23</div><div class="l">median PBT examples</div></div>
+    <div class="stat"><div class="v">4× LLMs</div><div class="l">Qwen·Llama·gpt-oss·compound</div></div>
+  </div>
+  <div class="columns three" style="margin-top:36px;">
+    <div class="tile">
+      <h3>UNDERSPEC × 2</h3>
+      <p>tokenizer_truncate · brd_tiebreaker</p>
+    </div>
+    <div class="tile">
+      <h3>OVERSPEC × 1</h3>
+      <p>path_sanitize</p>
+    </div>
+    <div class="tile">
+      <h3>PRECOND_MISMATCH × 2</h3>
+      <p>kth_smallest · rate_limit</p>
+    </div>
+    <div class="tile warn">
+      <h3>EDGE_DRIFT × 2</h3>
+      <p>binary_search · path_sanitize</p>
+    </div>
+    <div class="tile good">
+      <h3>Clean × 5</h3>
+      <p>sort · dedup · merge_sorted · prompt_priority · permission_check</p>
+    </div>
+    <div class="tile bad">
+      <h3>Bonus finding</h3>
+      <p>5 / 22 Qwen first-shot specs returned syntax errors — LLM-driven spec authoring is a noisy channel.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 9. DEMO ATTACK -->
+<section class="slide">
+  <div class="slide-brand"><b>DiffSpec-PBT</b> · Live result · Task 06</div>
+  <div class="slide-num">09 / 16</div>
+  <div class="eyebrow">Case Study — Tokenizer Truncate</div>
+  <h2>UNDERSPEC found in 46 PBT examples.</h2>
+  <div class="term">
+    <div class="head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+      <span style="margin-left:8px;">$ python -m evals.run_evals --task 06_token</span></div>
+    <div class="body"><span class="prompt">$</span> python -m evals.run_evals --task 06_tokenizer_truncate
+<span class="dim">────────────────────────────────────────────────────────────────────</span>
+task                     drift  type           pbt    time
+<span class="dim">────────────────────────────────────────────────────────────────────</span>
+06_tokenizer_truncate    <span class="b">YES</span>    <span class="b">UNDERSPEC</span>      46     0.32s
+<span class="dim">────────────────────────────────────────────────────────────────────</span>
+
+[uniqueness] qwen=False vs llama=True
+  input  : ([0], 1)        <span class="dim"># one token, asking for ≤1 token</span>
+  output : []              <span class="dim"># mutated: empty result</span>
+
+Llama accepts the empty truncation (len(o) ≤ n holds vacuously).
+Qwen rejects it (o == tokens[:min(n, len(tokens))] requires the
+actual prefix).
+
+<span class="err">→ Llama's spec admits arbitrary token-dropping,</span>
+<span class="err">  not just prefix-trimming — a prompt-injection adjacent</span>
+<span class="err">  failure mode.</span>
+</div>
+  </div>
+</section>
+
+<!-- 10. DEMO BRD -->
+<section class="slide">
+  <div class="slide-brand"><b>DiffSpec-PBT</b> · Live result · Task 11</div>
+  <div class="slide-num">10 / 16</div>
+  <div class="eyebrow">Case Study — Real-World BRD</div>
+  <h2>The methodology earns its keep.</h2>
+  <div class="columns">
+    <div>
+      <p style="margin-top:0;"><b>Requirement (verbatim from
+        <i>Vamos Argentina</i> BRD §III.8):</b></p>
+      <p style="border-left:3px solid var(--accent); padding-left:14px;
+                font-style:italic; color:#cdd3e3; margin-top:14px;">
+        "If two or more fans have identical scores, the tie is broken by,
+        in order:<br>(1) higher total Gameplay points,<br>(2) more unique
+        platforms shared,<br>(3) earlier submission timestamp."
+      </p>
+      <p style="color:var(--muted); margin-top:16px;">
+        Three-tier tiebreaker. One model encodes all three rules. The
+        other encodes only the primary <code>total_score</code> tier.
+      </p>
+    </div>
+    <div>
+<pre class="code"><span class="c">[uniqueness] UNDERSPEC</span>
+  input :  [(0, 0, 0, 1_700_000_000),
+            (0, 0, 0, 1_700_000_000)]
+  output:  [(0, 0, 0, 1_700_000_000),
+            (0, 0, 0, 1_700_000_001)]
+  qwen  : <span class="b">False</span> (timestamp order wrong)
+  llama : <span class="ok">True</span>  (primary key matches, ok)
+
+<span class="b">→ Llama's spec silently dropped</span>
+<span class="b">  the gameplay-points and</span>
+<span class="b">  platform-count tiebreaker rules.</span>
+<span class="b">  Discovered in 209 PBT examples.</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- 11. ALL TASKS -->
+<section class="slide">
+  <div class="slide-brand"><b>DiffSpec-PBT</b> · Per-task table</div>
+  <div class="slide-num">11 / 16</div>
+  <div class="eyebrow">All 11 Tasks</div>
+  <h2>Where the drift hides.</h2>
+  <table class="cmp">
+    <thead>
+      <tr><th>ID</th><th>Task</th><th>Disagreement Type(s)</th><th>PBT to first</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>01</td><td>sort</td><td>— (specs agree)</td><td>—</td></tr>
+      <tr><td>02</td><td>dedup</td><td>— (specs agree)</td><td>—</td></tr>
+      <tr><td>03</td><td>binary_search</td><td>EDGE_DRIFT</td><td>106</td></tr>
+      <tr><td>04</td><td>kth_smallest</td><td>PRECOND_MISMATCH</td><td>170</td></tr>
+      <tr><td>05</td><td>merge_sorted</td><td>— (specs agree)</td><td>—</td></tr>
+      <tr><td>06</td><td>tokenizer_truncate</td><td class="deny">UNDERSPEC</td><td>46</td></tr>
+      <tr><td>07</td><td>prompt_priority</td><td>— (specs agree)</td><td>—</td></tr>
+      <tr><td>08</td><td>permission_check</td><td>— (specs agree)</td><td>—</td></tr>
+      <tr><td>09</td><td>rate_limit</td><td>PRECOND_MISMATCH</td><td>99</td></tr>
+      <tr><td>10</td><td>path_sanitize</td><td>EDGE_DRIFT, OVERSPEC</td><td>33</td></tr>
+      <tr style="background:rgba(34,211,238,0.06);"><td><b>11</b></td><td><b>brd_tiebreaker</b></td><td class="deny"><b>UNDERSPEC</b></td><td>209</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:22px;color:var(--muted);">
+    True negatives matter: 4/11 tasks agreed across 80–400 sampled inputs each.
+    A diagnostic that flagged every pair would be useless noise.
+  </p>
+</section>
+
+<!-- 12. COMPARISON -->
+<section class="slide">
+  <div class="slide-brand"><b>DiffSpec-PBT</b> · How it compares</div>
+  <div class="slide-num">12 / 16</div>
+  <div class="eyebrow">Comparison</div>
+  <h2>Where DiffSpec-PBT sits.</h2>
+  <table class="cmp">
+    <thead><tr><th>Approach</th><th>Mechanism</th><th>Soundness</th><th>Cost</th><th>Ground truth needed?</th></tr></thead>
+    <tbody>
+      <tr><td>SPOTs (Lahiri 2026)</td><td>SMT-based small proofs</td><td>formal</td><td>seconds–minutes</td><td>yes (a second spec)</td></tr>
+      <tr><td>Feng & Sergey 2026</td><td>PBT on human-written specs</td><td>refutation-based</td><td>seconds</td><td>yes (the spec author's intent)</td></tr>
+      <tr><td>Rao DiffSpec 2024</td><td>differential testing of <i>code</i></td><td>refutation-based</td><td>seconds</td><td>yes (trusted spec)</td></tr>
+      <tr><td>AutoSpec / SpecGen</td><td>LLM spec generation</td><td>none</td><td>seconds</td><td>none (but no validation either)</td></tr>
+      <tr style="background:rgba(34,211,238,0.06);">
+        <td><b>DiffSpec-PBT</b></td>
+        <td><b>PBT on cross-LLM spec pairs</b></td>
+        <td><b style="color:var(--good);">refutation-based</b></td>
+        <td><b style="color:var(--good);">~1 s / task</b></td>
+        <td><b style="color:var(--good);">none — diversity IS the oracle</b></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 13. IMPLEMENTATION -->
+<section class="slide">
+  <div class="slide-brand"><b>DiffSpec-PBT</b> · Implementation</div>
+  <div class="slide-num">13 / 16</div>
+  <div class="eyebrow">Implementation</div>
+  <h2>1,500 lines of Python. No SMT. No Lean.</h2>
+  <div class="columns">
+    <div>
+      <ul class="bullets" style="margin-top:0;">
+        <li><b>Language:</b> Python 3.10+ — dataclasses, type hints.</li>
+        <li><b>PBT:</b> <code>hypothesis</code> with shrinking.</li>
+        <li><b>LLM access:</b> NVIDIA NIM via OpenAI-compatible REST, two model families (Qwen3-Coder, Llama 3.3).</li>
+        <li><b>Tests:</b> pytest + property-based tests on the differ itself.</li>
+        <li><b>Deps:</b> hypothesis only at runtime. Live mode adds <code>requests</code>.</li>
+      </ul>
+    </div>
+    <div>
+<pre class="code"><span class="c"># Reproduce from a fresh clone:</span>
+$ git clone &lt;repo&gt;
+$ cd DiffSpec-PBT-Apart-Research
+$ pip install -e <span class="s">".[test]"</span>
+
+$ make test     <span class="c"># unit + property-based tests</span>
+$ make eval     <span class="c"># 6/11 drift, ~7s wall</span>
+
+<span class="c"># Regenerate fixtures via NIM:</span>
+$ echo <span class="s">"NVIDIA_API_KEY=..."</span> &gt; .env
+$ bash scripts/gen_fixtures.sh
+
+<span class="c"># Models used (committed in fixtures):</span>
+<span class="c">#   qwen/qwen3-coder-480b-a35b-instruct</span>
+<span class="c">#   meta/llama-3.3-70b-instruct</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- 14. LIMITATIONS -->
+<section class="slide">
+  <div class="slide-brand"><b>DiffSpec-PBT</b> · Limitations</div>
+  <div class="slide-num">14 / 16</div>
+  <div class="eyebrow">What This Doesn't Solve</div>
+  <h2>Owning the failure modes.</h2>
+  <div class="columns three" style="margin-top:18px;">
+    <div class="tile warn">
+      <h3>L1 · Correlated failure</h3>
+      <p>If both LLMs make the same wrong choice, we stay silent.
+         Two models is the minimum, not the goal.</p>
+    </div>
+    <div class="tile warn">
+      <h3>L2 · Executability</h3>
+      <p>Both specs must run as Python. Non-decidable but executable
+         specs are fine; specs needing a prover are out of scope.</p>
+    </div>
+    <div class="tile warn">
+      <h3>L3 · Generation noise</h3>
+      <p>Even at <code>temperature=0.0</code>, we observed one Qwen
+         response truncated mid-expression. Fixture mode insulates the
+         eval; live mode must retry.</p>
+    </div>
+    <div class="tile">
+      <h3>L4 · Strategy authoring</h3>
+      <p>Input strategies are hand-written. A weak strategy misses
+         real disagreements. Future: LLM-authored strategies validated
+         by the same differ.</p>
+    </div>
+    <div class="tile">
+      <h3>L5 · No automatic repair</h3>
+      <p>We surface the drift; we don't fix it. The taxonomy type
+         points to a repair heuristic — agent-loop work for future
+         iteration.</p>
+    </div>
+    <div class="tile">
+      <h3>L6 · Pairwise only</h3>
+      <p>Two models, not N. An <i>N</i>-way differential with
+         majority vote is the obvious next step.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 15. FUTURE WORK -->
+<section class="slide">
+  <div class="slide-brand"><b>DiffSpec-PBT</b> · Future Work</div>
+  <div class="slide-num">15 / 16</div>
+  <div class="eyebrow">Future Work</div>
+  <h2>From prototype to production gate.</h2>
+  <div class="columns three" style="margin-top:18px;">
+    <div class="tile">
+      <h3>1 · Lean port</h3>
+      <p>Re-implement on top of Lean's <code>Plausible</code> so
+         validated specs flow directly into proof obligations.</p>
+    </div>
+    <div class="tile">
+      <h3>2 · N-way differential</h3>
+      <p>Add Mistral, DeepSeek, Nemotron etc. Use majority vote as
+         oracle; flag triples that all-agree-and-are-wrong.</p>
+    </div>
+    <div class="tile">
+      <h3>3 · Mutation testing the differ</h3>
+      <p>Mutate the specs and verify the differ catches the
+         mutation. Like mutation testing of test suites, applied to
+         spec validators.</p>
+    </div>
+    <div class="tile">
+      <h3>4 · Automatic spec repair</h3>
+      <p>Each taxonomy type points to a repair heuristic
+         (UNDERSPEC → add a conjunct; OVERSPEC → weaken one).
+         Agent-loop closes the gap.</p>
+    </div>
+    <div class="tile">
+      <h3>5 · CI integration</h3>
+      <p>Drop-in GitHub Action that runs DiffSpec-PBT on every PR
+         modifying a spec. Sub-second per task means it fits the
+         per-PR budget.</p>
+    </div>
+    <div class="tile">
+      <h3>6 · LLM-authored strategies</h3>
+      <p>Use an LLM to generate the input/output Hypothesis strategy,
+         validated by the differ in turn. Closes the bootstrap loop.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 16. CLOSE -->
+<section class="slide center">
+  <div class="slide-num">16 / 16</div>
+  <div class="eyebrow">Thank you</div>
+  <h1 style="max-width:1100px;">
+    Cross-model diversity, made auditable.
+  </h1>
+  <p class="lede" style="margin-top:24px;max-width:820px;">
+    Specifications are the bottleneck in trustworthy AI software.
+    DiffSpec-PBT validates LLM-generated specs against each other,
+    in seconds, without ever knowing the right answer.
+  </p>
+  <div class="stats" style="margin-top:36px;max-width:980px;">
+    <div class="stat"><div class="v">7/11</div><div class="l">tasks flagged</div></div>
+    <div class="stat"><div class="v">64%</div><div class="l">drift rate (4-way)</div></div>
+    <div class="stat"><div class="v">~7 s</div><div class="l">end-to-end</div></div>
+    <div class="stat"><div class="v">MIT</div><div class="l">licensed, clone today</div></div>
+  </div>
+  <div class="signature" style="margin-top:40px;">
+    <span class="dot"></span>
+    <span><b style="color:#e9ecf3;">Fatimah Emad Eldin</b> &nbsp;·&nbsp; DiffSpec-PBT v0.1.0 &nbsp;·&nbsp; SPS Hackathon 2026</span>
+    <span class="dot"></span>
+  </div>
+</section>
+
+</body>
+</html>

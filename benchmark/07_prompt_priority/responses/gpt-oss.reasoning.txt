@@ -1,0 +1,40 @@
+We need to produce Python functions pre(i) and post(i,o). The requirement: "Prompt Priority Assembly: Given a system prompt, a user prompt, and an ordered list of retrieved sources, assemble a single context list of strings in priority order: system first, then user, then retrieved sources in their given order."
+
+We need to define what input i is. Likely a tuple or dict containing system_prompt, user_prompt, retrieved_sources. The pre should check validity: system_prompt is a string, user_prompt is a string, retrieved_sources is a list (or iterable) of strings. Also ensure order? Not needed.
+
+post(i,o) should check that o is a list of strings where first element equals system_prompt, second equals user_prompt, then the rest equal retrieved_sources in order.
+
+Thus implement pre(i): accept any object; we can expect i to be a dict with keys 'system', 'user', 'sources' maybe. But we need to define based on requirement. Could define i as a tuple (system, user, sources). Simpler: i is a tuple of three elements: system_prompt (str), user_prompt (str), retrieved_sources (list of str). We'll check that.
+
+post(i,o): check that o is list of strings, length = 2 + len(sources), and o[0]==system, o[1]==user, and o[2:]==sources.
+
+Implement accordingly.
+
+Edge cases: ensure each source is string.
+
+Write code:
+
+def pre(i):
+    if not isinstance(i, tuple) or len(i)!=3: return False
+    system, user, sources = i
+    if not isinstance(system, str) or not isinstance(user, str): return False
+    if not isinstance(sources, (list, tuple)): return False
+    for s in sources:
+        if not isinstance(s, str):
+            return False
+    return True
+
+def post(i,o):
+    if not pre(i): return False
+    system, user, sources = i
+    if not isinstance(o, list): return False
+    if len(o) != 2 + len(sources): return False
+    if o[0] != system or o[1] != user: return False
+    if o[2:] != list(sources): return False
+    # also ensure each element is string
+    for elem in o:
+        if not isinstance(elem, str):
+            return False
+    return True
+
+That's it. Ensure no imports. Output only code.

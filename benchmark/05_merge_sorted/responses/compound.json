@@ -1,0 +1,17 @@
+{
+  "provider": "groq",
+  "model": "groq/compound",
+  "timestamp_utc": "2026-05-25T00:38:28Z",
+  "elapsed_seconds": 4,
+  "extract_status": "missing_pre_or_post",
+  "usage": {},
+  "reasoning_chars": 0,
+  "content_chars": 0,
+  "response": {
+    "error": {
+      "message": "Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jz761ax9ebpvf4yaagvgft76` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7360, Requested 1626. Please try again in 7.395s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing",
+      "type": "compound",
+      "code": "rate_limit_exceeded"
+    }
+  }
+}

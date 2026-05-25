@@ -1,0 +1,58 @@
+{
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "timestamp_utc": "2026-05-25T00:36:30Z",
+  "elapsed_seconds": 2,
+  "extract_status": "ok",
+  "usage": {
+    "queue_time": 0.016990136,
+    "prompt_tokens": 215,
+    "prompt_time": 0.00901747,
+    "completion_tokens": 590,
+    "completion_time": 1.220557005,
+    "total_tokens": 805,
+    "total_time": 1.229574475,
+    "completion_tokens_details": {
+      "reasoning_tokens": 479
+    }
+  },
+  "reasoning_chars": 1910,
+  "content_chars": 354,
+  "response": {
+    "id": "chatcmpl-81869702-5e5e-4d8b-97bb-3d0aeee8205c",
+    "object": "chat.completion",
+    "created": 1779669390,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "def pre(i):\n    return isinstance(i, list) and all(isinstance(x, int) for x in i)\n\n\ndef post(i, o):\n    if not isinstance(o, list):\n        return False\n    if not all(isinstance(x, int) for x in o):\n        return False\n    if not pre(i):\n        return False\n    uniq_i = set(i)\n    uniq_o = set(o)\n    return uniq_o == uniq_i and len(o) == len(uniq_i)",
+          "reasoning": "We need to produce Python functions pre(i) and post(i,o). pre checks valid input: list of integers. So pre(i) returns True iff i is a list (or iterable?) and each element is int. Also maybe allow empty list. So pre(i): isinstance(i, list) and all(isinstance(x, int) for x in i). Could also accept other sequence types? Requirement says \"Given a list of integers\". So list.\n\npost(i,o): returns True iff o is a list of integers, contains exactly the unique elements of i, order unspecified. So we need to check that set(o) == set(i) and that len(o) == len(set(i)) (ensuring no duplicates). Also ensure each element is int. Also ensure o is list. Also ensure no extra elements. So condition: isinstance(o, list) and all(isinstance(x, int) for x in o) and set(o) == set(i) and len(o) == len(set(i)). That ensures uniqueness. Also need to ensure that o contains each unique element exactly once. The set equality ensures same elements, but duplicates in o would still have same set; we need to ensure no duplicates: len(o) == len(set(o)). But if len(o) == len(set(i)) and set(o)==set(i), then duplicates can't exist because duplicates would increase len(o) beyond set size. So fine.\n\nEdge cases: i may have duplicates; set(i) yields unique. So post must accept any ordering.\n\nThus produce code:\n\ndef pre(i):\n    return isinstance(i, list) and all(isinstance(x, int) for x in i)\n\ndef post(i, o):\n    if not isinstance(o, list):\n        return False\n    if not all(isinstance(x, int) for x in o):\n        return False\n    if not pre(i):\n        return False\n    uniq_i = set(i)\n    uniq_o = set(o)\n    return uniq_o == uniq_i and len(o) == len(uniq_i)\n\nBut we might not need to call pre(i) inside post; but it's okay. However spec says post(i,o) returns True iff o is correct output for valid input i. If i is invalid, post should be False (since pre(i) false). So we can include check.\n\nThus final answer: just code."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.016990136,
+      "prompt_tokens": 215,
+      "prompt_time": 0.00901747,
+      "completion_tokens": 590,
+      "completion_time": 1.220557005,
+      "total_tokens": 805,
+      "total_time": 1.229574475,
+      "completion_tokens_details": {
+        "reasoning_tokens": 479
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_96d96a151c",
+    "x_groq": {
+      "id": "req_01kse8zm0eebavnft2m39t9t8q",
+      "seed": 141351353
+    },
+    "service_tier": "on_demand"
+  }
+}

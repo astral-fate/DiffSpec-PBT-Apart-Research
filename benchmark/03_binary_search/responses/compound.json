@@ -1,0 +1,95 @@
+{
+  "provider": "groq",
+  "model": "groq/compound",
+  "timestamp_utc": "2026-05-25T00:38:20Z",
+  "elapsed_seconds": 3,
+  "extract_status": "ok",
+  "usage": {
+    "queue_time": 1.147103,
+    "prompt_tokens": 1459,
+    "prompt_time": 0.135358,
+    "completion_tokens": 414,
+    "completion_time": 0.885484,
+    "total_tokens": 1873,
+    "total_time": 1.020842
+  },
+  "reasoning_chars": 344,
+  "content_chars": 456,
+  "response": {
+    "id": "stub",
+    "object": "chat.completion",
+    "created": 1779669500,
+    "model": "groq/compound",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "def pre(i):\n    return (\n        isinstance(i, tuple)\n        and len(i) == 2\n        and isinstance(i[0], list)\n        and all(isinstance(x, int) for x in i[0])\n        and i[0] == sorted(i[0])\n        and isinstance(i[1], int)\n    )\n\ndef post(i, o):\n    lst, target = i\n    if o == -1:\n        return target not in lst\n    else:\n        return (\n            isinstance(o, int)\n            and 0 <= o < len(lst)\n            and lst[o] == target\n        )",
+          "reasoning": "```python\ndef pre(i):\n    return isinstance(i, tuple) and len(i) == 2 and isinstance(i[0], list) and all(isinstance(x, int) for x in i[0]) and i[0] == sorted(i[0]) and isinstance(i[1], int)\n\ndef post(i, o):\n    lst, target = i\n    if o == -1:\n        return target not in lst\n    else:\n        return lst[o] == target and -1 <= o < len(lst)\n```"
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 1.147103,
+      "prompt_tokens": 1459,
+      "prompt_time": 0.135358,
+      "completion_tokens": 414,
+      "completion_time": 0.885484,
+      "total_tokens": 1873,
+      "total_time": 1.020842
+    },
+    "usage_breakdown": {
+      "models": [
+        {
+          "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "usage": {
+            "queue_time": 0.378076982,
+            "prompt_tokens": 256,
+            "prompt_time": 0.01246596,
+            "completion_tokens": 20,
+            "completion_time": 0.045103844,
+            "total_tokens": 276,
+            "total_time": 0.057569804
+          }
+        },
+        {
+          "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "usage": {
+            "queue_time": 0.752109054,
+            "prompt_tokens": 561,
+            "prompt_time": 0.025564171,
+            "completion_tokens": 111,
+            "completion_time": 0.251466853,
+            "total_tokens": 672,
+            "total_time": 0.277031024
+          }
+        },
+        {
+          "model": "openai/gpt-oss-120b",
+          "usage": {
+            "queue_time": 0.016917127,
+            "prompt_tokens": 642,
+            "prompt_time": 0.097327705,
+            "completion_tokens": 283,
+            "completion_time": 0.588912816,
+            "total_tokens": 925,
+            "total_time": 0.686240521,
+            "prompt_tokens_details": {
+              "cached_tokens": 256
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 145
+            }
+          }
+        }
+      ]
+    },
+    "x_groq": {
+      "id": "stub"
+    },
+    "service_tier": "on_demand"
+  }
+}

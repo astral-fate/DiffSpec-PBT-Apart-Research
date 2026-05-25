@@ -1,0 +1,52 @@
+{
+  "provider": "nim",
+  "model": "meta/llama-3.3-70b-instruct",
+  "timestamp_utc": "2026-05-25T00:01:35Z",
+  "elapsed_seconds": 3,
+  "extract_status": "ok",
+  "usage": {
+    "prompt_tokens": 229,
+    "total_tokens": 335,
+    "completion_tokens": 106,
+    "prompt_tokens_details": null
+  },
+  "reasoning_chars": 0,
+  "content_chars": 361,
+  "response": {
+    "id": "chatcmpl-98cf6e68b69a2af9",
+    "object": "chat.completion",
+    "created": 1779667293,
+    "model": "meta/llama-3.3-70b-instruct",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "def pre(i):\n    return isinstance(i, dict) and 'count' in i and 'limit' in i and 'rolled' in i and isinstance(i['count'], int) and isinstance(i['limit'], int) and isinstance(i['rolled'], bool) and i['limit'] > 0\n\ndef post(i, o):\n    if not pre(i):\n        return False\n    if i['rolled']:\n        return o\n    else:\n        return o == (i['count'] < i['limit'])",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "tool_calls": [],
+          "reasoning": null,
+          "reasoning_content": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": null,
+        "token_ids": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+      "prompt_tokens": 229,
+      "total_tokens": 335,
+      "completion_tokens": 106,
+      "prompt_tokens_details": null
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "kv_transfer_params": null
+  }
+}

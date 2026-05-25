@@ -1,0 +1,31 @@
+We need to output Python code defining pre(i) and post(i,o). Input i presumably is a tuple of (user_id, allowed_list, active). Need to define pre: valid input? Should check types: user identifier maybe any hashable? allowed-list of identifiers list; active boolean. So pre returns True iff i is a tuple of length 3, first element hashable (maybe int/str), second is list (or iterable) of same type elements, third is bool. Could be more strict: allowed list must be list of same type as user identifier? Not required but reasonable.
+
+post(i,o): returns True iff o is True exactly when user in allowed list and active is True. So compute condition.
+
+Implement:
+
+def pre(i):
+    if not isinstance(i, tuple) or len(i)!=3: return False
+    user, allowed, active = i
+    if not isinstance(active, bool): return False
+    if not isinstance(allowed, (list, tuple, set)): return False
+    # check each element hashable
+    try:
+        hash(user)
+    except TypeError:
+        return False
+    for a in allowed:
+        try:
+            hash(a)
+        except TypeError:
+            return False
+    return True
+
+post(i,o):
+    if not isinstance(o, bool): return False
+    user, allowed, active = i
+    return o == (active and (user in allowed))
+
+Return bool.
+
+Make sure no imports. Provide code only.

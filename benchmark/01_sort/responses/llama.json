@@ -1,0 +1,52 @@
+{
+  "provider": "nim",
+  "model": "meta/llama-3.3-70b-instruct",
+  "timestamp_utc": "2026-05-24T23:45:46Z",
+  "elapsed_seconds": 2,
+  "extract_status": "ok",
+  "usage": {
+    "prompt_tokens": 180,
+    "total_tokens": 257,
+    "completion_tokens": 77,
+    "prompt_tokens_details": null
+  },
+  "reasoning_chars": 0,
+  "content_chars": 244,
+  "response": {
+    "id": "chatcmpl-b8a35270e2a4c793",
+    "object": "chat.completion",
+    "created": 1779666345,
+    "model": "meta/llama-3.3-70b-instruct",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "def pre(i):\n    return isinstance(i, list) and all(isinstance(x, int) for x in i)\n\ndef post(i, o):\n    return isinstance(o, list) and all(isinstance(x, int) for x in o) and sorted(i) == sorted(o) and all(o[j] <= o[j+1] for j in range(len(o)-1))",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "tool_calls": [],
+          "reasoning": null,
+          "reasoning_content": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": null,
+        "token_ids": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+      "prompt_tokens": 180,
+      "total_tokens": 257,
+      "completion_tokens": 77,
+      "prompt_tokens_details": null
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "kv_transfer_params": null
+  }
+}

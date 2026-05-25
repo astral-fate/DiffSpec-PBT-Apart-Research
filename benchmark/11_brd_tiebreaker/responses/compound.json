@@ -1,0 +1,92 @@
+{
+  "provider": "groq",
+  "model": "groq/compound",
+  "timestamp_utc": "2026-05-25T00:37:21Z",
+  "elapsed_seconds": 2,
+  "extract_status": "ok",
+  "usage": {
+    "queue_time": 0.123065,
+    "prompt_tokens": 2430,
+    "prompt_time": 0.105645,
+    "completion_tokens": 781,
+    "completion_time": 1.7043,
+    "total_tokens": 3211,
+    "total_time": 1.809945
+  },
+  "reasoning_chars": 1551,
+  "content_chars": 1232,
+  "response": {
+    "id": "stub",
+    "object": "chat.completion",
+    "created": 1779669442,
+    "model": "groq/compound",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "def pre(i):\n    if not isinstance(i, list):\n        return False\n    for fan in i:\n        if not isinstance(fan, tuple) or len(fan) != 4:\n            return False\n        if not all(isinstance(x, int) for x in fan):\n            return False\n    return True\n\ndef post(i, o):\n    if not pre(i):\n        return False\n    if len(i) == 0:\n        return o == []\n    if not isinstance(o, list):\n        return False\n    if len(o) != len(i):\n        return False\n    # Verify o is a permutation of i\n    if sorted(i) != sorted(o):\n        return False\n    # Verify sorting according to the tiebreaker rules\n    for a, b in zip(o, o[1:]):\n        ts1, gp1, up1, sub1 = a\n        ts2, gp2, up2, sub2 = b\n        if ts1 > ts2:\n            continue\n        if ts1 < ts2:\n            return False\n        # total_score equal, compare gameplay points\n        if gp1 > gp2:\n            continue\n        if gp1 < gp2:\n            return False\n        # gameplay points equal, compare unique platforms\n        if up1 > up2:\n            continue\n        if up1 < up2:\n            return False\n        # unique platforms equal, compare timestamps (earlier is better)\n        if sub1 <= sub2:\n            continue\n        return False\n    return True",
+          "reasoning": "```python\ndef pre(i):\n    if not isinstance(i, list):\n        return False\n    for fan in i:\n        if not isinstance(fan, tuple) or len(fan) != 4:\n            return False\n        total_score, gameplay_points, unique_platforms, submission_timestamp = fan\n        if not all(isinstance(x, int) for x in fan):\n            return False\n    return True\n\ndef post(i, o):\n    if not pre(i):\n        return False\n    if len(i) == 0:\n        return o == []\n    if len(o) == 0:\n        return False\n\n    # Check that output is a permutation of input\n    if sorted(i) != sorted(o):\n        return False\n\n    # Check that output is sorted\n    for j in range(len(o) - 1):\n        total_score1, gameplay_points1, unique_platforms1, submission_timestamp1 = o[j]\n        total_score2, gameplay_points2, unique_platforms2, submission_timestamp2 = o[j + 1]\n\n        if total_score1 > total_score2:\n            continue\n        elif total_score1 < total_score2:\n            return False\n        else:\n            if gameplay_points1 > gameplay_points2:\n                continue\n            elif gameplay_points1 < gameplay_points2:\n                return False\n            else:\n                if unique_platforms1 > unique_platforms2:\n                    continue\n                elif unique_platforms1 < unique_platforms2:\n                    return False\n                else:\n                    if submission_timestamp1 <= submission_timestamp2:\n                        continue\n                    else:\n                        return False\n    return True\n```"
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.123065,
+      "prompt_tokens": 2430,
+      "prompt_time": 0.105645,
+      "completion_tokens": 781,
+      "completion_time": 1.7043,
+      "total_tokens": 3211,
+      "total_time": 1.809945
+    },
+    "usage_breakdown": {
+      "models": [
+        {
+          "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "usage": {
+            "queue_time": 0.016885027,
+            "prompt_tokens": 439,
+            "prompt_time": 0.01622675,
+            "completion_tokens": 20,
+            "completion_time": 0.04531904,
+            "total_tokens": 459,
+            "total_time": 0.06154579
+          }
+        },
+        {
+          "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "usage": {
+            "queue_time": 0.088043525,
+            "prompt_tokens": 744,
+            "prompt_time": 0.029788024,
+            "completion_tokens": 338,
+            "completion_time": 0.764724082,
+            "total_tokens": 1082,
+            "total_time": 0.794512106
+          }
+        },
+        {
+          "model": "openai/gpt-oss-120b",
+          "usage": {
+            "queue_time": 0.018136334,
+            "prompt_tokens": 1247,
+            "prompt_time": 0.059630186,
+            "completion_tokens": 423,
+            "completion_time": 0.894256899,
+            "total_tokens": 1670,
+            "total_time": 0.953887085,
+            "completion_tokens_details": {
+              "reasoning_tokens": 91
+            }
+          }
+        }
+      ]
+    },
+    "x_groq": {
+      "id": "stub"
+    },
+    "service_tier": "on_demand"
+  }
+}

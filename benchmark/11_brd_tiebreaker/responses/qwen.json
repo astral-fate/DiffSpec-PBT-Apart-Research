@@ -1,0 +1,64 @@
+{
+  "provider": "nim",
+  "model": "qwen/qwen3-coder-480b-a35b-instruct",
+  "timestamp_utc": "2026-05-25T00:05:38Z",
+  "elapsed_seconds": 57,
+  "extract_status": "ok",
+  "usage": {
+    "prompt_tokens": 344,
+    "completion_tokens": 134,
+    "total_tokens": 478,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 64
+    }
+  },
+  "reasoning_chars": 0,
+  "content_chars": 537,
+  "response": {
+    "id": "chatcmpl-f8f4f0b9-bdfe-4a3a-8839-6c74166650c4",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "content": "def pre(i):\n    if not isinstance(i, list):\n        return False\n    for record in i:\n        if not isinstance(record, tuple) or len(record) != 4:\n            return False\n        if not all(isinstance(x, int) for x in record):\n            return False\n    return True\n\ndef post(i, o):\n    if not pre(i):\n        return False\n    if o is None or not isinstance(o, list):\n        return False\n    if len(o) != len(i):\n        return False\n    for idx in range(len(i)):\n        if o[idx] not in i:\n            return False\n    return True",
+          "role": "assistant",
+          "reasoning_content": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "created": 1779667533,
+    "model": "qwen/qwen3-coder-480b-a35b-instruct",
+    "service_tier": null,
+    "system_fingerprint": null,
+    "object": "chat.completion",
+    "usage": {
+      "prompt_tokens": 344,
+      "completion_tokens": 134,
+      "total_tokens": 478,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 64
+      }
+    },
+    "nvext": {
+      "worker_id": {
+        "prefill_worker_id": 7587894933637319020,
+        "prefill_dp_rank": 0,
+        "decode_worker_id": 7587894933637319020,
+        "decode_dp_rank": 0
+      },
+      "timing": {
+        "request_received_ms": 1779667533161,
+        "prefill_wait_time_ms": 4.302693,
+        "prefill_time_ms": 281.379153,
+        "ttft_ms": 285.681846,
+        "total_time_ms": 5537.177170999999,
+        "kv_hit_rate": 0.0,
+        "router_queue_depth": 0
+      }
+    }
+  }
+}

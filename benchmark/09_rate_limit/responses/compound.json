@@ -1,0 +1,95 @@
+{
+  "provider": "groq",
+  "model": "groq/compound",
+  "timestamp_utc": "2026-05-25T00:37:17Z",
+  "elapsed_seconds": 2,
+  "extract_status": "ok",
+  "usage": {
+    "queue_time": 0.122847,
+    "prompt_tokens": 1652,
+    "prompt_time": 0.130365,
+    "completion_tokens": 602,
+    "completion_time": 1.371321,
+    "total_tokens": 2254,
+    "total_time": 1.501686
+  },
+  "reasoning_chars": 291,
+  "content_chars": 363,
+  "response": {
+    "id": "stub",
+    "object": "chat.completion",
+    "created": 1779669437,
+    "model": "groq/compound",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "def pre(i):\n    return (\n        isinstance(i, tuple) and\n        len(i) == 3 and\n        isinstance(i[0], int) and i[0] >= 0 and\n        isinstance(i[1], int) and i[1] > 0 and\n        isinstance(i[2], bool)\n    )\n\ndef post(i, o):\n    if not pre(i):\n        return False\n    count, limit, rolled = i\n    allowed = rolled or (count < limit)\n    return o is allowed",
+          "reasoning": "```python\ndef pre(i):\n    return isinstance(i, tuple) and len(i) == 3 and isinstance(i[0], int) and i[0] >= 0 and isinstance(i[1], int) and i[1] > 0 and isinstance(i[2], bool)\n\ndef post(i, o):\n    count, limit, rolled = i\n    return (rolled and o) or (not rolled and count < limit and o)\n```"
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.122847,
+      "prompt_tokens": 1652,
+      "prompt_time": 0.130365,
+      "completion_tokens": 602,
+      "completion_time": 1.371321,
+      "total_tokens": 2254,
+      "total_time": 1.501686
+    },
+    "usage_breakdown": {
+      "models": [
+        {
+          "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "usage": {
+            "queue_time": 0.088083804,
+            "prompt_tokens": 308,
+            "prompt_time": 0.01194951,
+            "completion_tokens": 20,
+            "completion_time": 0.04503399,
+            "total_tokens": 328,
+            "total_time": 0.0569835
+          }
+        },
+        {
+          "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "usage": {
+            "queue_time": 0.017427128,
+            "prompt_tokens": 613,
+            "prompt_time": 0.023933115,
+            "completion_tokens": 96,
+            "completion_time": 0.216541264,
+            "total_tokens": 709,
+            "total_time": 0.240474379
+          }
+        },
+        {
+          "model": "openai/gpt-oss-120b",
+          "usage": {
+            "queue_time": 0.017336171,
+            "prompt_tokens": 731,
+            "prompt_time": 0.094481505,
+            "completion_tokens": 486,
+            "completion_time": 1.10974628,
+            "total_tokens": 1217,
+            "total_time": 1.204227785,
+            "prompt_tokens_details": {
+              "cached_tokens": 256
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 367
+            }
+          }
+        }
+      ]
+    },
+    "x_groq": {
+      "id": "stub"
+    },
+    "service_tier": "on_demand"
+  }
+}

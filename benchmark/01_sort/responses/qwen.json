@@ -1,0 +1,64 @@
+{
+  "provider": "nim",
+  "model": "qwen/qwen3-coder-480b-a35b-instruct",
+  "timestamp_utc": "2026-05-25T00:06:33Z",
+  "elapsed_seconds": 6,
+  "extract_status": "ok",
+  "usage": {
+    "prompt_tokens": 160,
+    "completion_tokens": 111,
+    "total_tokens": 271,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 64
+    }
+  },
+  "reasoning_chars": 0,
+  "content_chars": 381,
+  "response": {
+    "id": "chatcmpl-e0dda64f-3ea8-4c70-babe-bf1d0040f91e",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "content": "def pre(i):\n    return isinstance(i, list) and all(isinstance(x, int) for x in i)\n\ndef post(i, o):\n    if not isinstance(o, list):\n        return False\n    if len(o) != len(i):\n        return False\n    # Check if o is a valid sorting of i\n    if sorted(i) != sorted(o):\n        return False\n    # Check if o is non-decreasing\n    return all(o[j] <= o[j+1] for j in range(len(o)-1))",
+          "role": "assistant",
+          "reasoning_content": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "created": 1779667589,
+    "model": "qwen/qwen3-coder-480b-a35b-instruct",
+    "service_tier": null,
+    "system_fingerprint": null,
+    "object": "chat.completion",
+    "usage": {
+      "prompt_tokens": 160,
+      "completion_tokens": 111,
+      "total_tokens": 271,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 64
+      }
+    },
+    "nvext": {
+      "worker_id": {
+        "prefill_worker_id": 7587894933637319008,
+        "prefill_dp_rank": 0,
+        "decode_worker_id": 7587894933637319008,
+        "decode_dp_rank": 0
+      },
+      "timing": {
+        "request_received_ms": 1779667589580,
+        "prefill_wait_time_ms": 1.563273,
+        "prefill_time_ms": 424.949682,
+        "ttft_ms": 426.51295500000003,
+        "total_time_ms": 3851.994878,
+        "kv_hit_rate": 0.0,
+        "router_queue_depth": 0
+      }
+    }
+  }
+}

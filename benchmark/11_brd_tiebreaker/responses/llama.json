@@ -1,0 +1,52 @@
+{
+  "provider": "nim",
+  "model": "meta/llama-3.3-70b-instruct",
+  "timestamp_utc": "2026-05-25T00:04:41Z",
+  "elapsed_seconds": 17,
+  "extract_status": "ok",
+  "usage": {
+    "prompt_tokens": 355,
+    "total_tokens": 449,
+    "completion_tokens": 94,
+    "prompt_tokens_details": null
+  },
+  "reasoning_chars": 0,
+  "content_chars": 278,
+  "response": {
+    "id": "chatcmpl-a6b45d4360f847c8",
+    "object": "chat.completion",
+    "created": 1779667466,
+    "model": "meta/llama-3.3-70b-instruct",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```python\ndef pre(i):\n    return all(isinstance(x, tuple) and len(x) == 4 and all(isinstance(y, int) for y in x) for x in i)\n\ndef post(i, o):\n    if not pre(i):\n        return False\n    sorted_i = sorted(i, key=lambda x: (-x[0], -x[1], -x[2], x[3]))\n    return o == sorted_i\n```",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "tool_calls": [],
+          "reasoning": null,
+          "reasoning_content": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": null,
+        "token_ids": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+      "prompt_tokens": 355,
+      "total_tokens": 449,
+      "completion_tokens": 94,
+      "prompt_tokens_details": null
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "kv_transfer_params": null
+  }
+}

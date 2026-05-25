@@ -1,0 +1,58 @@
+{
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "timestamp_utc": "2026-05-25T00:36:45Z",
+  "elapsed_seconds": 2,
+  "extract_status": "ok",
+  "usage": {
+    "queue_time": 0.017742541,
+    "prompt_tokens": 409,
+    "prompt_time": 0.01879658,
+    "completion_tokens": 941,
+    "completion_time": 1.950476281,
+    "total_tokens": 1350,
+    "total_time": 1.9692728609999999,
+    "completion_tokens_details": {
+      "reasoning_tokens": 737
+    }
+  },
+  "reasoning_chars": 3175,
+  "content_chars": 741,
+  "response": {
+    "id": "chatcmpl-17b1d774-2bcd-409b-8920-96d8773f0bd7",
+    "object": "chat.completion",
+    "created": 1779669406,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "from collections import Counter\n\ndef pre(i):\n    if not isinstance(i, list):\n        return False\n    for rec in i:\n        if not (isinstance(rec, tuple) and len(rec) == 4):\n            return False\n        if not all(isinstance(field, int) for field in rec):\n            return False\n    return True\n\ndef post(i, o):\n    if not isinstance(o, list):\n        return False\n    if len(i) != len(o):\n        return False\n    if Counter(i) != Counter(o):\n        return False\n\n    def rank_key(r):\n        # (-total_score, -gameplay_points, -unique_platforms, submission_timestamp)\n        return (-r[0], -r[1], -r[2], r[3])\n\n    for prev, nxt in zip(o, o[1:]):\n        if rank_key(prev) > rank_key(nxt):\n            return False\n    return True",
+          "reasoning": "We need to produce Python code defining pre(i) and post(i,o). Input i is a list of fan records (tuples of four ints). pre should check that i is a list (or iterable) of tuples of length 4, each element int. Also ensure each tuple has ints. Also maybe ensure timestamps non-negative? Not required. So pre returns True if valid.\n\npost(i,o) should verify that o is a list (or same type) containing same multiset of records as i (i.e., permutation) and sorted according to ranking: descending total_score, then descending gameplay_points, then descending unique_platforms, then ascending submission_timestamp. Also stable for remaining ties (any order). So we need to check that o is a permutation of i (same elements count). Then check ordering condition: for each consecutive pair, the earlier element should be >= later according to comparator.\n\nDefine comparator function rank_key: (-total_score, -gameplay_points, -unique_platforms, submission_timestamp). Then sorted(i, key=rank_key). Since ties after all criteria may be any order, we just need to ensure that o is sorted according to that key non-decreasing (i.e., key values are non-decreasing). Actually we want highest rank first, so key should be tuple as above; sorting ascending yields correct order. So we can compute sorted_i = sorted(i, key=lambda r: (-r[0], -r[1], -r[2], r[3])). Then check that o is a permutation of i and that o equals sorted_i or any list that respects ordering but may differ in order among equal keys. Since equal keys can be any order, we can just check that for each adjacent pair, key(prev) <= key(next) (lexicographically). That ensures ordering but allows any permutation among equal keys. Also need to ensure same multiset: we can compare sorted versions of i and o using same key? But sorting will reorder equal keys arbitrarily; but if o has same elements, sorting both will be equal. Simpler: check that collections.Counter(i) == collections.Counter(o). Since tuples are hashable. Use from collections import Counter.\n\nThus post returns True if:\n\n- isinstance(o, list) (or sequence) and length matches i.\n- Counter(i) == Counter(o)\n- For all idx from 0 to len(o)-2: key(o[idx]) <= key(o[idx+1]) (lexicographically). Use tuple comparison.\n\nEdge cases: empty list.\n\nImplement pre: check isinstance(i, (list, tuple))? Input spec says list, but we can accept any sequence. We'll require list.\n\nImplementation:\n\ndef pre(i):\n    if not isinstance(i, list):\n        return False\n    for rec in i:\n        if not (isinstance(rec, tuple) and len(rec) == 4):\n            return False\n        for field in rec:\n            if not isinstance(field, int):\n                return False\n    return True\n\npost(i,o):\n    if not isinstance(o, list):\n        return False\n    if len(i) != len(o):\n        return False\n    from collections import Counter\n    if Counter(i) != Counter(o):\n        return False\n    def key(r):\n        return (-r[0], -r[1], -r[2], r[3])\n    for a,b in zip(o, o[1:]):\n        if key(a) > key(b):\n            return False\n    return True\n\nMake sure imports are at top-level? Allowed standard library imports. So include from collections import Counter.\n\nReturn only code."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.017742541,
+      "prompt_tokens": 409,
+      "prompt_time": 0.01879658,
+      "completion_tokens": 941,
+      "completion_time": 1.950476281,
+      "total_tokens": 1350,
+      "total_time": 1.9692728609999999,
+      "completion_tokens_details": {
+        "reasoning_tokens": 737
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_96d96a151c",
+    "x_groq": {
+      "id": "req_01kse902e1e0wth5nmen85typr",
+      "seed": 119432776
+    },
+    "service_tier": "on_demand"
+  }
+}

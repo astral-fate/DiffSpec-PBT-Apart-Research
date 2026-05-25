@@ -1,0 +1,64 @@
+{
+  "provider": "nim",
+  "model": "qwen/qwen3-coder-480b-a35b-instruct",
+  "timestamp_utc": "2026-05-25T00:10:53Z",
+  "elapsed_seconds": 29,
+  "extract_status": "ok",
+  "usage": {
+    "prompt_tokens": 169,
+    "completion_tokens": 209,
+    "total_tokens": 378,
+    "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 64
+    }
+  },
+  "reasoning_chars": 0,
+  "content_chars": 800,
+  "response": {
+    "id": "chatcmpl-fd5e67b6-a364-476f-ac87-736cebe2d5e5",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "content": "def pre(i):\n    if not isinstance(i, tuple) or len(i) != 3:\n        return False\n    user_id, allowed_list, active = i\n    if not isinstance(allowed_list, list):\n        return False\n    if not isinstance(active, bool):\n        return False\n    return True\n\ndef post(i, o):\n    if not isinstance(i, tuple) or len(i) != 3:\n        return False\n    user_id, allowed_list, active = i\n    if not isinstance(allowed_list, list) or not isinstance(active, bool):\n        return False\n    if not o:\n        return False\n    return True\n\ndef post(i, o):\n    if not isinstance(i, tuple) or len(i) != 3:\n        return False\n    user_id, allowed_list, active = i\n    if not isinstance(allowed_list, list) or not isinstance(active, bool):\n        return False\n    return o == (user_id in allowed_list and active)",
+          "role": "assistant",
+          "reasoning_content": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "created": 1779667824,
+    "model": "qwen/qwen3-coder-480b-a35b-instruct",
+    "service_tier": null,
+    "system_fingerprint": null,
+    "object": "chat.completion",
+    "usage": {
+      "prompt_tokens": 169,
+      "completion_tokens": 209,
+      "total_tokens": 378,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 64
+      }
+    },
+    "nvext": {
+      "worker_id": {
+        "prefill_worker_id": 7587894933637319020,
+        "prefill_dp_rank": 0,
+        "decode_worker_id": 7587894933637319020,
+        "decode_dp_rank": 0
+      },
+      "timing": {
+        "request_received_ms": 1779667824283,
+        "prefill_wait_time_ms": 2.848377,
+        "prefill_time_ms": 21809.397318,
+        "ttft_ms": 21812.245695,
+        "total_time_ms": 28798.614932,
+        "kv_hit_rate": 0.0,
+        "router_queue_depth": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+```python
+def pre(i):
+    return isinstance(i, tuple) and len(i) == 2 and isinstance(i[0], list) and all(isinstance(x, int) for x in i[0]) and i[0] == sorted(i[0]) and isinstance(i[1], int)
+
+def post(i, o):
+    lst, target = i
+    if o == -1:
+        return target not in lst
+    else:
+        return lst[o] == target and -1 <= o < len(lst)
+```
