@@ -1,5 +1,8 @@
 # DiffSpec-PBT
 
+<img width="2752" height="1536" alt="DiffSpec-PBT" src="https://github.com/user-attachments/assets/71a311a4-551f-4cc6-9707-cd323c7626f6" />
+
+
 **Validating LLM-generated formal specifications via differential property-based testing.**
 
 Prompt independent LLM spec authors for the same natural-language
